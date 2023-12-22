@@ -9,7 +9,7 @@
 #define USER_INPUT
 
 #define EXPT 1 // the experiment to run: 1 = 1H
-#define NO_SCANS 4
+#define NO_SCANS 2
 
 #define SCAN_EVENT_COUNT 6 // must match no. of entries below
 // edit values between {} only!
