@@ -19,6 +19,7 @@
 
 // global variables
 boolean start = false;
+extern struct scan_events *se;
 
 void init();
 void setup() {
@@ -36,7 +37,7 @@ void setup() {
 }
 
 void loop() {
-
+  struct scan_events *se;
   // Listen for the command to go or stop (g or s)
   listen_for_instruction();
 
@@ -44,20 +45,26 @@ void loop() {
     init_scan_events();
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
-      Serial.print("\tScan no: ");
-      Serial.println(i);
       switch (EXPT) {
         case 1:
-          acquire_1H();
+          Serial.print("\tScan no: ");
+          Serial.println(i);
+          acquire_1H(se, SCAN_EVENT_COUNT, REPORT);
           break;
         default:
           Serial.println("No experiment found");
+          i = NO_SCANS + 1; // interrupt if valid EXPT not found
           break;
       }
       if (i == NO_SCANS) {
         start = false;
         Serial.println("Scans complete!");
         Serial.println("Experiment complete\n====================");
+        Serial.println("");
+      }
+      if (i > NO_SCANS) {
+        start = false;
+        Serial.println("Scans aborted!");
         Serial.println("");
       }
     }
