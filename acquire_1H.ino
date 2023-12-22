@@ -6,7 +6,7 @@
  *
  * */
 
-void acquire_1H(struct scan_events *se, int size) {
+void acquire_1H() {
 // void acquire_1H() {
   Serial.println("\tHello from acquire_1H!");
 }
