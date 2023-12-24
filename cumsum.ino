@@ -13,6 +13,8 @@
 
 void cumsum(scan_events *se, int size, int report)
 {
+  extern scan_events *se;
+  
 	// leaving se.end_time[0] unchanged, hence i starts at 1
 	for (int i = 1; i < size; i++)
 	{
