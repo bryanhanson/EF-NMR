@@ -25,8 +25,6 @@ void init();
 void setup() {
   // set up code runs once at startup
   Serial.begin(9600);
-  Serial.println("Arduino listening...");
-  Serial.println("Enter g or s at any time");
 
   // turn off all pins to start
   // pins 0 and 1 are reserved for rx, tx
@@ -34,8 +32,6 @@ void setup() {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW);
   }
-
-  init_scan_events();  // only needs to be done once
 }
 
 void loop() {
