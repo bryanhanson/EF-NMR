@@ -17,7 +17,7 @@ void init_scan_events()
   char *en[] = EVENT_NAMES;
 
   // declare and malloc the struct
-  struct scan_events *ev = malloc(sizeof(struct scan_events));
+  scan_events *ev = malloc(sizeof( scan_events));
   if (ev == NULL)
   {
     Serial.println("Allocation failed");

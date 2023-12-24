@@ -19,7 +19,7 @@
 
 // global variables
 boolean start = false;
-struct scan_events *se;
+scan_events *se;
 
 void init();
 void setup() {

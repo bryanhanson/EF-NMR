@@ -11,7 +11,7 @@
  * @return A completed `scan_events` struct.
 * */
 
-void compute_on_off(struct scan_events *se, int size, int report)
+void compute_on_off(scan_events *se, int size, int report)
 {
   // on starts at zero and then the other values come from off,
   // except for the last value which is not used

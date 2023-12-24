@@ -13,7 +13,7 @@
 #ifndef STRUCTS
 #define STRUCTS
 
-struct scan_events
+typedef struct scan_events
 {
   /// pointers to event names (derived from `EVENT_NAMES` in `user_input.h`)
   char *event_names[SCAN_EVENT_COUNT];
