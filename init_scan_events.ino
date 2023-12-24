@@ -7,11 +7,10 @@
  * @return A `scan_event` struct.
  * */
 
-void init_scan_events()
-{
+void init_scan_events() {
 
   extern scan_events *se;
-  
+
   // declare and define user provided values from user_input.h
   int size = SCAN_EVENT_COUNT;
   int report = REPORT;
@@ -24,8 +23,7 @@ void init_scan_events()
   memcpy(se->pin, pin, sizeof pin);
   memcpy(se->off, durations, sizeof durations);
 
-  if (report > 1)
-  {
+  if (report > 1) {
     Serial.println("durations reports:");
     report_scan_events(se, size);
   }
@@ -36,10 +34,8 @@ void init_scan_events()
   // compute on/off times
   compute_on_off(se, SCAN_EVENT_COUNT, REPORT);
 
-  if (report >= 1)
-  {
+  if (report >= 1) {
     Serial.println("\nPulse program:");
     report_scan_events(se, size);
   }
-
 }
