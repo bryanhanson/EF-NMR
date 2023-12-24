@@ -2,9 +2,13 @@
  * @file
  * @brief Bryan's EF-NMR Software
  *
- * Inspired by the more complex version by Carl Michal.
+ * Inspired by the more complex version by Carl Michal, but built from scratch, with all its own warts.
  * Trying for Arduino-only control of the NMR.
  *
+ * There are two global variables that are important to understand:
+ *   * `start` A boolean which is monitored and modifed by `listen_for_instruction` and passed to `loop`.
+ *   * `pulse_program` The *address* of a struct holding the pulse program events. This is passed around and accessed by many functions. 
+ * 
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
@@ -19,9 +23,7 @@
 
 // global variables
 boolean start = false;
-
-// declare and malloc the struct
-scan_events *se = malloc(sizeof(scan_events));
+pulse_program *pp = malloc(sizeof(pulse_program));
 
 
 void init();
@@ -38,7 +40,7 @@ void setup() {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW);
   }
-  if (se == NULL) {
+  if (pp == NULL) {
     Serial.println("Allocation failed");
   }
 }
@@ -48,16 +50,16 @@ void loop() {
   // Listen continuously for the command to go or stop (g or s)
   listen_for_instruction();
 
-  // while loop runs one experiment with NO_SCANS scans, then stops, leaving the main loop simply listening
+  // while loop runs one experiment with NO_SCANS scans, then stops, leaving the main loop simply listening for g or s
   while (start) {
-    init_scan_events();  // get a fresh pulse program each time we "go"
+    init_pulse_program();  // get a fresh pulse program each time we "go"
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
       switch (EXPT) {
         case 1:
           Serial.print("\tScan no: ");
           Serial.println(i);
-          acquire_1H(se, SCAN_EVENT_COUNT, REPORT);
+          acquire_1H(pp, SCAN_EVENT_COUNT, REPORT);
           break;
         default:
           Serial.println("No experiment found");
@@ -66,14 +68,14 @@ void loop() {
       }
       if (i == NO_SCANS) {
         start = false;
-        free(se);
+        free(pp);
         Serial.println("Scans complete!");
         Serial.println("Experiment complete, stopping...\n================================");
         Serial.println("");
       }
       if (i > NO_SCANS) {
         start = false;
-        free(se);
+        free(pp);
         Serial.println("Scans aborted!");
         Serial.println("");
       }

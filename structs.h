@@ -1,7 +1,7 @@
 /**
- * @brief Struct to Hold Scan Event Parameters.
+ * @brief Struct to Hold Pulse Program Parameters.
  * 
- * Struct to hold scan event parameters, basically the info needed to trigger operations on the Arduino.
+ * Struct to hold a pulse program, basically the info needed to trigger operations on the Arduino.
  * 
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -13,7 +13,7 @@
 #ifndef STRUCTS
 #define STRUCTS
 
-typedef struct scan_events {
+typedef struct pulse_program {
   /// pointers to event names (derived from `EVENT_NAMES` in `user_input.h`)
   char *event_names[SCAN_EVENT_COUNT];
   /// Arduino output pin (copied from `PIN_ASSIGNMENTS` in `user_input.h`)
