@@ -19,7 +19,7 @@ void report_scan_events(struct scan_events *se, int size) {
   sprintf(buf, "----- \t --- \t -- \t\t ---");
   Serial.println(buf);
 
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i <= size; i++) {
     dtostrf(se->on[i], 6, 3, fbuf1);
     dtostrf(se->off[i], 6, 3, fbuf2);
     sprintf(buf, "%s \t % d \t %s \t %s", se->event_names[i], se->pin[i], fbuf1, fbuf2);

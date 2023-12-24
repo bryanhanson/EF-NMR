@@ -8,7 +8,6 @@
  *
  * */
 
-#include <string.h>
 #include "user_input.h"
 
 #ifndef STRUCTS

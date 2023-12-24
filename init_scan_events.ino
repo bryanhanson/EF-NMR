@@ -46,5 +46,5 @@ void init_scan_events()
     report_scan_events(ev, size);
   }
 
-  free(ev);
+  // free(ev); // don't free here!  somewhere else!
 }
