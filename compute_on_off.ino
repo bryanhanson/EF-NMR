@@ -13,6 +13,7 @@
 
 void compute_on_off(scan_events *se, int size, int report)
 {
+  extern scan_events *se;
   // on starts at zero and then the other values come from off,
   // except for the last value which is not used
   se->on[0] = 0.0;

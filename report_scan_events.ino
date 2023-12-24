@@ -10,6 +10,7 @@
  * */
 
 void report_scan_events(scan_events *se, int size) {
+  extern scan_events *se;
   char buf[80];
   char fbuf1[10];
   char fbuf2[10];
