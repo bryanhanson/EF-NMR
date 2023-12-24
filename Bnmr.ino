@@ -19,7 +19,7 @@
 
 // global variables
 boolean start = false;
-extern struct scan_events *se;
+struct scan_events *se;
 
 void init();
 void setup() {
@@ -34,15 +34,16 @@ void setup() {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW);
   }
+
+  init_scan_events();  // only needs to be done once
 }
 
 void loop() {
-  struct scan_events *se;
+
   // Listen for the command to go or stop (g or s)
   listen_for_instruction();
 
   while (start) {
-    init_scan_events();
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
       switch (EXPT) {
@@ -53,7 +54,7 @@ void loop() {
           break;
         default:
           Serial.println("No experiment found");
-          i = NO_SCANS + 1; // interrupt if valid EXPT not found
+          i = NO_SCANS + 1;  // interrupt if valid EXPT not found
           break;
       }
       if (i == NO_SCANS) {
