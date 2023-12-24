@@ -6,8 +6,10 @@
  *
  * */
 
-void acquire_1H(scan_events *se, int size, int report) {
-  extern scan_events *se;
+void acquire_1H(pulse_program *pp, int size, int report) {
+  extern pulse_program *pp;
   Serial.println("\tHello from acquire_1H!");
-  report_scan_events(se, size);
+  if (REPORT > 1) {
+    report_pulse_program(pp, size);
+  }
 }
