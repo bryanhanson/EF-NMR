@@ -11,7 +11,7 @@
  * @return A `scan_events` struct.
  * */
 
-void cumsum(struct scan_events *se, int size, int report)
+void cumsum(scan_events *se, int size, int report)
 {
 	// leaving se.end_time[0] unchanged, hence i starts at 1
 	for (int i = 1; i < size; i++)

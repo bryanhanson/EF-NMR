@@ -9,7 +9,7 @@
  * @return void.  A summary of the struct is printed to the console.
  * */
 
-void report_scan_events(struct scan_events *se, int size) {
+void report_scan_events(scan_events *se, int size) {
   char buf[80];
   char fbuf1[10];
   char fbuf2[10];
