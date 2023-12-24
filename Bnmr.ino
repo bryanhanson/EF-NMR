@@ -28,7 +28,7 @@ void init();
 void setup() {
   // set up code runs once at startup
   Serial.begin(9600);
-  if (Serial.available() > 0) {
+  if (Serial) {
     Serial.println("Arduino listening...");
     Serial.println("Enter g or s at any time");
   }
@@ -57,8 +57,7 @@ void loop() {
         case 1:
           Serial.print("\tScan no: ");
           Serial.println(i);
-          report_scan_events(se, SCAN_EVENT_COUNT);  // wrong here
-          acquire_1H(se, SCAN_EVENT_COUNT, REPORT);  // also wrong here!
+          acquire_1H(se, SCAN_EVENT_COUNT, REPORT);
           break;
         default:
           Serial.println("No experiment found");
@@ -69,7 +68,7 @@ void loop() {
         start = false;
         free(se);
         Serial.println("Scans complete!");
-        Serial.println("Experiment complete, stopping...\n====================");
+        Serial.println("Experiment complete, stopping...\n================================");
         Serial.println("");
       }
       if (i > NO_SCANS) {
