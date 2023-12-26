@@ -16,7 +16,7 @@
 #define SCAN_EVENT_COUNT 6  // must match no. of entries below
 // edit values between {} only!
 #define EVENT_NAMES { "pol", "del1", "tx", "del2", "rx", "rd" }
-#define EVENT_DURATIONS { 3000, 500, 2000, 500, 1000, 1000 }
+#define EVENT_DURATIONS { 2000, 500, 1000, 500, 500, 1000 }
 #define PIN_ASSIGNMENTS { 2, -1, 3, -1, 4, -1 }  // -1 means no pin is hot (delay of some type)
 
 
