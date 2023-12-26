@@ -20,7 +20,7 @@ void report_pulse_program(pulse_program *pp, int size) {
   sprintf(buf, "----- \t --- \t -- \t\t ---");
   Serial.println(buf);
 
-  for (int i = 0; i <= size; i++) {
+  for (int i = 0; i < size; i++) {
     dtostrf(pp->on[i], 6, 3, fbuf1);
     dtostrf(pp->off[i], 6, 3, fbuf2);
     sprintf(buf, "%s \t % d \t %s \t %s", pp->event_names[i], pp->pin[i], fbuf1, fbuf2);
