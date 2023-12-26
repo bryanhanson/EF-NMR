@@ -8,7 +8,7 @@
 
 void acquire_1H(pulse_program *pp, int size, int report) {
   extern pulse_program *pp;
-  Serial.println("\tHello from acquire_1H!");
+  // Serial.println("\tHello from acquire_1H!");
   if (REPORT > 1) {
     report_pulse_program(pp, size);
   }

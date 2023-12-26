@@ -2,7 +2,7 @@
  * @file
  * @brief Listen to the Serial Port for Instructions.
  *
- * Simply sets a flag (`start`) that is monitored in the main loop.
+ * Simply sets a flag (`start`) that is monitored by the main loop.
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license

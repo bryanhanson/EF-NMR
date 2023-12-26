@@ -29,13 +29,15 @@ pulse_program *pp = malloc(sizeof(pulse_program));
 void init();
 void setup() {
   // set up code runs once at startup
+  extern pulse_program *pp;
+  
   Serial.begin(9600);
   if (Serial) {
     Serial.println("Arduino listening...");
     Serial.println("Enter g or s at any time");
   }
   // turn off all pins to start
-  // pins 0 and 1 are reserved for rx, tx
+  // pins 0 and 1 are reserved for rx, tx, don't use!
   for (int i = 2; i <= 13; i++) {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW);
@@ -46,6 +48,8 @@ void setup() {
 }
 
 void loop() {
+  extern pulse_program *pp;
+  extern boolean start;
 
   // Listen continuously for the command to go or stop (g or s)
   listen_for_instruction();
