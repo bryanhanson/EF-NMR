@@ -37,11 +37,8 @@ void setup() {
     Serial.println("Enter g or s at any time");
   }
   // turn off all pins to start
-  // pins 0 and 1 are reserved for rx, tx, don't use!
-  for (int i = 2; i <= 13; i++) {
-    pinMode(i, OUTPUT);
-    digitalWrite(i, LOW);
-  }
+  reset_pins();
+
   if (pp == NULL) {
     Serial.println("Allocation failed");
   }
@@ -71,6 +68,7 @@ void loop() {
       if (i == NO_SCANS) {
         start = false;
         free(pp);
+        reset_pins();
         Serial.println("Scans complete!");
         Serial.println("Experiment complete, stopping...\n================================");
         Serial.println("");
@@ -78,6 +76,7 @@ void loop() {
       if (i > NO_SCANS) {
         start = false;
         free(pp);
+        reset_pins();
         Serial.println("Invalid experiment, scans aborted!\n==================================");
         Serial.println("");
       }

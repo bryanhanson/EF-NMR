@@ -8,7 +8,7 @@
 #ifndef USER_INPUT
 #define USER_INPUT
 
-#define EXPT "19F"
+#define EXPT "1H"
 #define NO_SCANS 2
 #define REPORT 1  // 0 = no troubleshooting; > 0 increasing levels of debug reporting
 #define TIME_CONV 1 // value should convert durations below to milliseconds
