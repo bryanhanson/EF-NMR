@@ -3,6 +3,7 @@
 ## Version 0.1.1
 ### Misc
 * Added `pacakge.json` to provide information in a more formal manner.
+* Improved and expanded `README.md`.
 
 ## Version 0.1.0 26 Dec 2023
 * First release to Github.

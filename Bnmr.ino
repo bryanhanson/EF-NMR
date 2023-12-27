@@ -30,7 +30,7 @@ void init();
 void setup() {
   // set up code runs once at startup
   extern pulse_program *pp;
-  
+
   Serial.begin(9600);
   if (Serial) {
     Serial.println("Arduino listening...");
@@ -59,16 +59,14 @@ void loop() {
     init_pulse_program();  // get a fresh pulse program each time we "go"
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
-      switch (EXPT) {
-        case 1:
-          Serial.print("\tScan no: ");
-          Serial.println(i);
-          acquire_1H(pp, SCAN_EVENT_COUNT, REPORT);
-          break;
-        default:
-          Serial.println("No experiment found");
-          i = NO_SCANS + 1;  // interrupt if valid EXPT not found
-          break;
+      if (strcmp(EXPT, "1H") == 0) {
+        Serial.print("\tScan no: ");
+        Serial.println(i);
+        acquire_1H(pp, SCAN_EVENT_COUNT, REPORT);
+      }
+      if (strcmp(EXPT, "1H") != 0) {
+        Serial.println("No experiment found");
+        i = NO_SCANS + 1;  // interrupt if valid EXPT not found
       }
       if (i == NO_SCANS) {
         start = false;
@@ -80,7 +78,7 @@ void loop() {
       if (i > NO_SCANS) {
         start = false;
         free(pp);
-        Serial.println("Scans aborted!");
+        Serial.println("Invalid experiment, scans aborted!\n==================================");
         Serial.println("");
       }
     }
