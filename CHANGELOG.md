@@ -1,6 +1,10 @@
 # Change Log for Bnmr
 
-## Version 0.1.0
+## Version 0.1.1
+### Misc
+* Added `pacakge.json` to provide information in a more formal manner.
+
+## Version 0.1.0 26 Dec 2023
 * First release to Github.
 
 ## Early Tagged Versions
