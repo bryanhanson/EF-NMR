@@ -12,16 +12,22 @@ void acquire_1H(pulse_program *pp, int size, int report) {
   if (REPORT > 1) {
     report_pulse_program(pp, size);
   }
-  // this next part ignores the receive process reality until later
+
   for (int i = 0; i < size; i++) {
     float time = (pp->off[i] - pp->on[i]) / TIME_CONV;  // CRITICAL: units here should be milliseconds
+    // delay (no pin hot)
     if (pp->pin[i] == -1) {
-      delay(time); // no pin hot, just wait
+      delay(time);
     }
-    if (pp->pin[i] != -1) {
+    // transmit
+    if (pp->pin[i] == TX_PIN) {
       digitalWrite(pp->pin[i], HIGH);
       delay(time);
       digitalWrite(pp->pin[i], LOW);
+    }
+    // receive
+    if (pp->pin[i] == RX_PIN) {
+      capture_FID(pulse_program *pp, int size, int report);
     }
   }
 }
