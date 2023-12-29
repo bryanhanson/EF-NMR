@@ -59,7 +59,7 @@ void loop() {
       if (strcmp(EXPT, "1H") == 0) {
         Serial.print("\tScan no: ");
         Serial.println(i);
-        acquire_1H(pp, SCAN_EVENT_COUNT, REPORT);
+        acquire(pp, SCAN_EVENT_COUNT, REPORT);
       }
       if (strcmp(EXPT, "1H") != 0) {
         Serial.println("No experiment found");

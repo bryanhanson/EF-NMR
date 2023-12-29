@@ -4,7 +4,11 @@
 ### Misc
 * Added `pacakge.json` to provide information in a more formal manner.
 * Improved and expanded `README.md`.
+* Renamed `acquire_1H()` to just `acquire()`.
+
+### New Functions
 * Added `reset_pins()` function.
+* Added `capture_FID()` function.
 
 ## Version 0.1.0 26 Dec 2023
 * First release to Github.
