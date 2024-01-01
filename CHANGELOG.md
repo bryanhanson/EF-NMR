@@ -2,13 +2,13 @@
 
 ## Version 0.1.1
 ### Misc
-* Added `pacakge.json` to provide information in a more formal manner.
+* Added `package.json` to provide information in a more formal manner.
 * Improved and expanded `README.md`.
 * Renamed `acquire_1H()` to just `acquire()`.
 
 ### New Functions
 * Added `reset_pins()` function.
-* Added `capture_FID()` function.
+* Added `capture_FID()` function.  Handles the ADC and data comms.
 
 ## Version 0.1.0 26 Dec 2023
 * First release to Github.

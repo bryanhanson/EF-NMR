@@ -14,7 +14,6 @@
 #define TIME_CONV 1 // value should convert durations below to milliseconds
 
 #define TX_PIN 3 // transmit pin
-#define RX_PIN 4 // receive pin
 #define POL_PIN 2 // polarization coil control pin
 
 #define SCAN_EVENT_COUNT 6  // must match no. of entries below
@@ -22,6 +21,9 @@
 #define EVENT_NAMES { "pol", "del1", "tx", "del2", "rx", "rd" }
 #define EVENT_DURATIONS { 2000, 500, 1000, 500, 500, 1000 }
 #define PIN_ASSIGNMENTS { POL_PIN, -1, TX_PIN, -1, RX_PIN, -1 }  // -1 means no pin is hot -- use for delays
+
+// Don't change these values
+#define RX_PIN A0 // receive pin; this is hard-wired in capture_FID, DO NOT CHANGE!
 
 
 #endif
