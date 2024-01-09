@@ -1,7 +1,6 @@
 /**
- * @brief Struct to Hold Pulse Program Parameters.
+ * @brief Structs to Hold Various Parameters.
  * 
- * Struct to hold a pulse program, basically the info needed to trigger operations on the Arduino.
  * 
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -22,6 +21,21 @@ typedef struct pulse_program {
   float on[SCAN_EVENT_COUNT];
   /// event off times (cumulative sum of the event durations, computed from `EVENT_DURATIONS` in `user_input.h`)
   float off[SCAN_EVENT_COUNT];
+};
+
+typedef struct ring_buffer {
+  /// buffer to hold values
+  int rbuf[RB_SIZE];
+  /// write index
+  int writeIndx;
+  /// read index
+  int readIndx;
+  /// no of points to be collected
+  int np;
+  /// no of points actually collected
+  int npc;
+  /// no of points transmitted via the serial port
+  int nps;
 };
 
 #endif
