@@ -13,5 +13,6 @@
 
 #define RX_PIN A0 // receive pin; this is hard-wired in capture_FID, DO NOT CHANGE!  Automatic: #define A0 14;
 #define RB_SIZE 6  // ring buffer capacity; only N-1 values can actually be held
+#define NO_POINTS 10 // no of data points to collect in a single scan
 
 #endif

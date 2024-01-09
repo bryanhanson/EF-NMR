@@ -21,6 +21,7 @@
 
 #include "structs.h"
 #include "user_input.h"
+#include "misc_defines.h"
 
 // global variables
 boolean start = false;
@@ -70,6 +71,7 @@ void loop() {
       if (i == NO_SCANS) {
         start = false;
         free(pp);
+        free(rb);
         reset_pins();
         Serial.println("Scans complete!");
         Serial.println("Experiment complete, stopping...\n================================");
@@ -78,6 +80,7 @@ void loop() {
       if (i > NO_SCANS) {
         start = false;
         free(pp);
+        free(rb);
         reset_pins();
         Serial.println("Invalid experiment, scans aborted!\n==================================");
         Serial.println("");

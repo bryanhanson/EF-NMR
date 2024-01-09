@@ -8,6 +8,7 @@
  * */
 
 #include "user_input.h"
+#include "misc_defines.h"
 
 #ifndef STRUCTS
 #define STRUCTS
@@ -25,7 +26,7 @@ typedef struct pulse_program {
 
 typedef struct ring_buffer {
   /// buffer to hold ADC output
-  int rbuf[RB_SIZE];
+  uint16_t rbuf[RB_SIZE];
   /// write index
   int writeIndx;
   /// read index

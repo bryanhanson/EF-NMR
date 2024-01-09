@@ -13,10 +13,12 @@
  * 
  * */
 
-void capture_FID(pulse_program *pp, int size, ring_buffer rb, int report) {
+void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
   extern ring_buffer *rb;
   config_ADC();
+  init_ring_buffer(rb);
+  report_ring_buffer(rb);
   start_ADC();
   stop_ADC();
 }
@@ -59,10 +61,14 @@ void stop_ADC() {
 // the argument name is mandatory, and the argument is not used here.
 // It is apparently called each time the ADC data register is full.
 ISR(ADC_vect) {
-  ADC_output = ADC;
-  npc += 1;
-  // store data in a ring buffer
-  if (npc == np) {
-    stop_ADC();  // all points have been collected
+  extern ring_buffer *rb;
+  
+  if (rb->np == rb->npc) { // all points collected, stop the ADC
+    stop_ADC();
+  }
+  if (rb->np != rb->npc) { // collect more data
+    rb->npc++;
+    put(rb, ADC); // send the value to the ring buffer
+    report_ring_buffer(rb);
   }
 }

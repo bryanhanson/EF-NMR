@@ -9,9 +9,9 @@
  *
  * */
 
-void acquire(pulse_program *pp, int size, ring_buffer rb, int report) {
+void acquire(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
-  extern ring_buffer *rb
+  extern ring_buffer *rb;
   // Serial.println("\tHello from acquire!");
   if (REPORT > 1) {
     report_pulse_program(pp, size);
@@ -30,7 +30,7 @@ void acquire(pulse_program *pp, int size, ring_buffer rb, int report) {
     }
     // receive
     if (pp->pin[i] == RX_PIN) {
-      capture_FID(pp, size, rb, report);
+      capture_FID(pp, size, rb, REPORT);
     }
   }
 }

@@ -22,8 +22,4 @@
 #define EVENT_DURATIONS { 2000, 500, 1000, 500, 500, 1000 }
 #define PIN_ASSIGNMENTS { POL_PIN, -1, TX_PIN, -1, RX_PIN, -1 }  // -1 means no pin is hot -- use for delays
 
-// Don't change these values
-#define RX_PIN A0 // receive pin; this is hard-wired in capture_FID, DO NOT CHANGE!  Automatic: #define A0 14;
-
-
 #endif
