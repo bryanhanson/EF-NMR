@@ -45,8 +45,8 @@ void config_ADC() {
 void start_ADC() {
   Serial.println("Starting the ADC...");
   ADCSRA |= (1 << ADSC);  // start the ADC
-  do {
-  } while (bit_is_set(ADCSRA, ADSC));  // ADSC returns to 0 when the reading is complete; this waits for first reading to settle
+  // do {
+  // } while (bit_is_set(ADCSRA, ADSC));  // ADSC returns to 0 when the reading is complete; this waits for first reading to settle
 }
 
 // Stop the ADC = stop acquiring data

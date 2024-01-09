@@ -12,7 +12,6 @@
 void acquire(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
   extern ring_buffer *rb;
-  // Serial.println("\tHello from acquire!");
   if (REPORT > 1) {
     report_pulse_program(pp, size);
   }
