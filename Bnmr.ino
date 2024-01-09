@@ -31,7 +31,7 @@ void setup() {
   // set up code runs once at startup
   extern pulse_program *pp;
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   if (Serial) {
     Serial.println("Arduino listening...");
     Serial.println("Enter g or s at any time");

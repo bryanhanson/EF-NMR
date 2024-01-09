@@ -3,7 +3,8 @@
  * @brief Capture the FID and Send it to the Serial Port
  *
  * Code here follows very closely the material in Dunbar 2020, Chapter 9.2
- * See the commentary there for even more details.
+ * See the commentary there for even more details.  Also, excellent info
+ * available at [Gammon's site](http://www.gammon.com.au/adc).
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -12,26 +13,22 @@
  * 
  * */
 
-void capture_FID(pulse_program *pp, int size, int report) {
-  extern pulse_program *pp;
-  // Serial.println("\tHello from capture_FID!");
-
-  volatile uint16_t ADC_output = 0;  // max value 65536
-
+// void capture_FID(pulse_program *pp, int size, int report) {
+//   extern pulse_program *pp;
+// Serial.println("\tHello from capture_FID!");
+void capture_FID() {
   config_ADC();
   start_ADC();
-  for (int i = 1; i <= 5; i++) {
-    Serial.print("\t\tADC = ");
-    Serial.println(ADC_output);
-    stop_ADC();
-  }
+  stop_ADC();
 }
 
-// Helper Functions
+// Helper Functions (written mostly in pure AVR C)
 
 // ADC Configuration
 void config_ADC() {
+  Serial.println("Configuring the ADC...");
   PRR &= ~(1 << PRADC);                                            // power up the ADC
+  ADCSRA |= (1 << ADEN);                                           // enable ADC
   ADCSRA = (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);             // slow the clock
   ADMUX = (0 << REFS1) | (1 << REFS0);                             // use 5 V internal reference
   ADMUX &= ~(1 << ADLAR);                                          // right-align the 10 bit output in 2 byte/16 bit space
@@ -40,25 +37,32 @@ void config_ADC() {
   ADCSRA |= (1 << ADIE);                                           // set interupt to notify data is available for further use
   ADCSRA |= (1 << ADATE);                                          // auto-trigger on
   ADCSRB = 0;                                                      // free-running mode
-  ADCSRA |= (1 << ADEN);                                           // enable ADC
   delay(20);                                                       // wait for voltage to settle
 }
 
-// Start the ADC
+// Start the ADC = start acquiring data
 void start_ADC() {
-  ADCSRA |= (1 << ADSC);
+  Serial.println("Starting the ADC...");
+  ADCSRA |= (1 << ADSC);  // start the ADC
+  do {
+  } while (bit_is_set(ADCSRA, ADSC));  // ADSC returns to 0 when the reading is complete; this waits for first reading to settle
 }
 
-// Stop the ADC
+// Stop the ADC = stop acquiring data
 void stop_ADC() {
-  ADCSRA |= (0 << ADSC);
+  Serial.println("Stopping the ADC...");
+  ADCSRA |= (0 << ADEN);
 }
 
 // Interupt Handler (ISR = interupt service routine)
 // This is the most peculiar function I have run into in a sea of novelties.
 // This is not called by anyone here; it must be called ISR and
-// the argument name is mandatory, and not used here.
+// the argument name is mandatory, and the argument is not used here.
 ISR(ADC_vect) {
-  volatile uint16_t ADC_output;  // max value 65536
-  ADC_output = ADCW;
+  ADC_output = ADC;
+  npc += 1;
+  // store data in a ring buffer
+  if (npc == np) {
+    stop_ADC();  // all points have been collected
+  }
 }

@@ -30,7 +30,8 @@ void acquire(pulse_program *pp, int size, int report) {
     }
     // receive
     if (pp->pin[i] == RX_PIN) {
-      capture_FID(pp, size, report);
+      // capture_FID(pp, size, report);
+      capture_FID();
     }
   }
 }

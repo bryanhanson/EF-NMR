@@ -9,7 +9,7 @@
 #define USER_INPUT
 
 #define EXPT "1H"
-#define NO_SCANS 2
+#define NO_SCANS 1
 #define REPORT 1  // 0 = no troubleshooting; > 0 increasing levels of debug reporting
 #define TIME_CONV 1 // value should convert durations below to milliseconds
 
@@ -23,7 +23,7 @@
 #define PIN_ASSIGNMENTS { POL_PIN, -1, TX_PIN, -1, RX_PIN, -1 }  // -1 means no pin is hot -- use for delays
 
 // Don't change these values
-#define RX_PIN A0 // receive pin; this is hard-wired in capture_FID, DO NOT CHANGE!
+#define RX_PIN A0 // receive pin; this is hard-wired in capture_FID, DO NOT CHANGE!  Automatic: #define A0 14;
 
 
 #endif
