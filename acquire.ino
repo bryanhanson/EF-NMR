@@ -9,8 +9,9 @@
  *
  * */
 
-void acquire(pulse_program *pp, int size, int report) {
+void acquire(pulse_program *pp, int size, ring_buffer rb, int report) {
   extern pulse_program *pp;
+  extern ring_buffer *rb
   // Serial.println("\tHello from acquire!");
   if (REPORT > 1) {
     report_pulse_program(pp, size);
@@ -18,8 +19,7 @@ void acquire(pulse_program *pp, int size, int report) {
 
   for (int i = 0; i < size; i++) {
     float time = (pp->off[i] - pp->on[i]) / TIME_CONV;  // CRITICAL: units here should be milliseconds
-    // delay (no pin hot)
-    if (pp->pin[i] == -1) {
+    if (pp->pin[i] == -1) { // no pin hot, simple delay
       delay(time);
     }
     // transmit
@@ -30,8 +30,7 @@ void acquire(pulse_program *pp, int size, int report) {
     }
     // receive
     if (pp->pin[i] == RX_PIN) {
-      // capture_FID(pp, size, report);
-      capture_FID();
+      capture_FID(pp, size, rb, report);
     }
   }
 }

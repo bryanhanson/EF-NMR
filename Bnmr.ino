@@ -5,10 +5,11 @@
  * Inspired by the more complex version by Carl Michal, but built from scratch, with all its own warts.
  * Trying for Arduino-only control of the NMR.
  *
- * There are two global variables that are important to understand:
+ * Global variables that are important to understand:
  *   * `start` A boolean which is monitored and modifed by `listen_for_instruction` and passed to `loop`.
  *   * `pulse_program` The *address* of a struct holding the pulse program events. This is passed around and accessed by many functions. 
- * 
+ *   * `ring_buffer` The *address* of a struct holding the ring buffer and related parameters. Used mainly by `acquire_FID()`.
+ *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
@@ -24,12 +25,12 @@
 // global variables
 boolean start = false;
 pulse_program *pp = malloc(sizeof(pulse_program));
+ring_buffer *rb = malloc(sizeof(ring_buffer));
 
-
-void init();
 void setup() {
   // set up code runs once at startup
   extern pulse_program *pp;
+  extern ring_buffer *rb;
 
   Serial.begin(115200);
   if (Serial) {
@@ -39,14 +40,15 @@ void setup() {
   // turn off all pins to start
   reset_pins();
 
-  if (pp == NULL) {
+  if ((pp == NULL) | (rb == NULL)) {
     Serial.println("Allocation failed");
   }
 }
 
 void loop() {
-  extern pulse_program *pp;
   extern boolean start;
+  extern pulse_program *pp;
+  extern ring_buffer *rb;
 
   // Listen continuously for the command to go or stop (g or s)
   listen_for_instruction();
@@ -59,7 +61,7 @@ void loop() {
       if (strcmp(EXPT, "1H") == 0) {
         Serial.print("\tScan no: ");
         Serial.println(i);
-        acquire(pp, SCAN_EVENT_COUNT, REPORT);
+        acquire(pp, SCAN_EVENT_COUNT, rb, REPORT);
       }
       if (strcmp(EXPT, "1H") != 0) {
         Serial.println("No experiment found");

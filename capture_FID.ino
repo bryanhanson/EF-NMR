@@ -13,10 +13,9 @@
  * 
  * */
 
-// void capture_FID(pulse_program *pp, int size, int report) {
-//   extern pulse_program *pp;
-// Serial.println("\tHello from capture_FID!");
-void capture_FID() {
+void capture_FID(pulse_program *pp, int size, ring_buffer rb, int report) {
+  extern pulse_program *pp;
+  extern ring_buffer *rb;
   config_ADC();
   start_ADC();
   stop_ADC();
@@ -58,6 +57,7 @@ void stop_ADC() {
 // This is the most peculiar function I have run into in a sea of novelties.
 // This is not called by anyone here; it must be called ISR and
 // the argument name is mandatory, and the argument is not used here.
+// It is apparently called each time the ADC data register is full.
 ISR(ADC_vect) {
   ADC_output = ADC;
   npc += 1;

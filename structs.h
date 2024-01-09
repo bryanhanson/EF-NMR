@@ -24,7 +24,7 @@ typedef struct pulse_program {
 };
 
 typedef struct ring_buffer {
-  /// buffer to hold values
+  /// buffer to hold ADC output
   int rbuf[RB_SIZE];
   /// write index
   int writeIndx;
