@@ -24,23 +24,25 @@ void init_ring_buffer(ring_buffer *rb) {
 
 int put(ring_buffer *rb, int item) {
   extern ring_buffer *rb;
-  if ((rb->writeIndx + 1) % RB_SIZE == rb->readIndx) {
-    Serial.println("receiver buffer is full");
-    return 0;
-  }
+  // if ((rb->writeIndx + 1) % RB_SIZE == rb->readIndx) {
+  //   Serial.println("\nreceive buffer is full");
+  //   return 0;
+  // }
   rb->rbuf[rb->writeIndx] = item;
-  rb->writeIndx = (rb->writeIndx + 1) % RB_SIZE;
+  rb->writeIndx = (rb->writeIndx + 1) % RB_SIZE; // advance index for next time (wraps around)
   return 1;
 }
 
 int get(ring_buffer *rb) {
   extern ring_buffer *rb;
+  int value = 0;
   if (rb->readIndx == rb->writeIndx) {
-    Serial.println("receiver buffer is empty");
+    Serial.println("\nreceive buffer is empty"); // may occur when the read out is faster than the ADC (seems unlikley)
     return 0;
   }
-  rb->readIndx = (rb->readIndx + 1) % RB_SIZE;
-  return 1;
+  value = rb->rbuf[rb->readIndx];
+  rb->readIndx = (rb->readIndx + 1) % RB_SIZE; // advance index for next time (wraps around)
+  return value;
 }
 
 void report_ring_buffer(ring_buffer *rb) {

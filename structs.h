@@ -25,18 +25,18 @@ typedef struct pulse_program {
 };
 
 typedef struct ring_buffer {
-  /// buffer to hold ADC output
-  uint16_t rbuf[RB_SIZE];
-  /// write index
-  int writeIndx;
-  /// read index
-  int readIndx;
-  /// no of points to be collected
-  int np;
-  /// no of points actually collected
-  int npc;
-  /// no of points transmitted via the serial port
-  int nps;
+  /// `rbuf`: buffer to hold ADC output
+  volatile uint16_t rbuf[RB_SIZE];
+  /// `writeIndx`: write index
+  volatile int writeIndx;
+  /// `readIndx`: read index
+  volatile int readIndx;
+  /// `np`: no of points to be collected
+  volatile int np;
+  /// `npc`: no of points actually collected
+  volatile int npc;
+  /// `nps`: no of points transmitted via the serial port
+  volatile int nps;
 };
 
 #endif

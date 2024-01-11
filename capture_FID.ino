@@ -18,15 +18,21 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern volatile ring_buffer *rb;
   config_ADC();
   init_ring_buffer(rb);
-  Serial.println("initialized state:");
-  report_ring_buffer(rb);
-  start_ADC();
-  if (rb->np == rb->npc) {  // all points collected, stop the ADC
+  // Serial.println("initialized state:");
+  // report_ring_buffer(rb);
+  start_ADC();  // at this point data is being collected "in the background", autonomously, with ISR watching continuosly
+  do {          // send any available data to the serial port
+    Serial.print("current buffer value: ");
+    Serial.println(get(rb));
+    rb->nps++;
+  } while (rb->nps < rb->npc);
+
+  if (rb->np == rb->npc) {  // all points collected and sent to serial port, we are done
     stop_ADC();
   }
 }
 
-// Helper Functions (written mostly in pure AVR C)
+// Helper Functions
 
 // ADC Configuration
 void config_ADC() {
@@ -60,8 +66,6 @@ void config_ADC() {
 void start_ADC() {
   Serial.println("Starting the ADC...");
   ADCSRA |= (1 << ADSC);  // start the ADC
-  // do {
-  // } while (bit_is_set(ADCSRA, ADSC));  // ADSC returns to 0 when the reading is complete; this waits for first reading to settle
 }
 
 // Stop the ADC = stop acquiring data
@@ -74,14 +78,17 @@ void stop_ADC() {
 // This is the most peculiar function I have run into in a sea of novelties.
 // This is not called by anyone here; it must be called ISR and
 // the argument name is mandatory, and the argument is not used here.
-// It is apparently called each time the ADC data register is full.
+// It is apparently called each time the ADC data register is full,
+// or, if in free running mode, it is called until the ADC is turned off
 ISR(ADC_vect) {
   extern volatile ring_buffer *rb;
-  uint16_t ADC;
+  // uint16_t ADC;
   // Serial.println("Hello from ISR");
   if (rb->np != rb->npc) {  // collect more data
+    put(rb, &ADC);          // put the value in the ring buffer (ADC is a memory address)
     rb->npc++;
-    put(rb, ADC);  // send the value to the ring buffer
+    Serial.print("\nnpc: ");
+    Serial.println(rb->npc);
     Serial.println("ADC collected a point:");
     report_ring_buffer(rb);
   }
