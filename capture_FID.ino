@@ -16,8 +16,10 @@
 void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
   extern ring_buffer *rb;
+  int cntr = 0; // counter for reporting ADC values; avoid scrolling off the right side
   config_ADC();
   init_ring_buffer(rb);
+  Serial.println("ADC readings: ");
   while (1) {
     if (!rb->adc_running) {
       rb->adc_running = true;
@@ -26,9 +28,13 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
     if (rb->adc_done) {
       rb->adc_running = false;
       rb->adc_done = false;
-      report_ring_buffer(rb);
-      Serial.print("current ADC reading: ");
-      Serial.println(get(rb));
+      // report_ring_buffer(rb);
+      cntr++;
+      Serial.print(" ");
+      Serial.print(get(rb)); // one must get the values otherwise the buffer fills quickly
+      if ((cntr % 20) == 0) {
+        Serial.println(" "); // wrap the output
+      }
       delay(250);
     }
     if (rb->np == rb->npc) {  // all points collected
