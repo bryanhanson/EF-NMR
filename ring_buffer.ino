@@ -18,29 +18,29 @@ void init_ring_buffer(ring_buffer *rb) {
     0,          // read index
     NO_POINTS,  // no of points to collect
     0,          // no of points collected so far
-    0           // no of points sent to serial port so far
+    0,          // no of points sent to serial port so far
+    false,      // is adc_running?
+    false       // is adc_done?
   };
 }
 
 int put(ring_buffer *rb, int item) {
   extern ring_buffer *rb;
-  // if ((rb->writeIndx + 1) % RB_SIZE == rb->readIndx) {
-  //   Serial.println("\nreceive buffer is full");
-  //   return 0;
-  // }
+  if ((rb->writeIndx + 1) % RB_SIZE == rb->readIndx) {
+    Serial.println("\nreceive buffer is full");
+    return 0;
+  }
   rb->rbuf[rb->writeIndx] = item;
   rb->writeIndx = (rb->writeIndx + 1) % RB_SIZE;  // advance index for next time (wraps around)
   return 1;
 }
-
-// get is not currently called anywhere I can find
 
 int get(ring_buffer *rb) {
   extern ring_buffer *rb;
   int value = 0;
   if (data_is_available(rb)) {
     value = rb->rbuf[rb->readIndx];
-    rb->readIndx = (rb->readIndx + 1) % RB_SIZE;  // advance index for next time (wraps around)
+    rb->readIndx = (rb->readIndx + 1) % RB_SIZE;
     return rb->rbuf[rb->readIndx];
   } else {
     return 1;
@@ -53,7 +53,7 @@ int data_is_available(ring_buffer *rb) {
     Serial.println("\nreceive buffer is empty");
     return 0;
   } else {
-    return 1; // there is something in the buffer
+    return 1;  // buffer has data
   }
 }
 
