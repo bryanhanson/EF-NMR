@@ -27,6 +27,8 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
       rb->adc_running = false;
       rb->adc_done = false;
       report_ring_buffer(rb);
+      Serial.print("current ADC reading: ");
+      Serial.println(get(rb));
       delay(500);
     }
     if (rb->np == rb->npc) {  // all points collected and sent to serial port, we are done

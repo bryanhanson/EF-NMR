@@ -33,13 +33,15 @@ int put(ring_buffer *rb, int item) {
   return 1;
 }
 
+// get is not currently called anywhere I can find
+
 int get(ring_buffer *rb) {
   extern ring_buffer *rb;
   int value = 0;
   if (data_is_available(rb)) {
     value = rb->rbuf[rb->readIndx];
     rb->readIndx = (rb->readIndx + 1) % RB_SIZE;  // advance index for next time (wraps around)
-    return value;
+    return rb->rbuf[rb->readIndx];
   } else {
     return 1;
   }
@@ -51,7 +53,7 @@ int data_is_available(ring_buffer *rb) {
     Serial.println("\nreceive buffer is empty");
     return 0;
   } else {
-    return 1;
+    return 1; // there is something in the buffer
   }
 }
 
