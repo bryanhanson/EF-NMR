@@ -33,7 +33,7 @@ void setup() {
   extern pulse_program *pp;
   extern ring_buffer *rb;
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   if (Serial) {
     Serial.println("Arduino listening...");
     Serial.println("Enter g or s at any time");
