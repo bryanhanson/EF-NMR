@@ -29,27 +29,13 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
       report_ring_buffer(rb);
       Serial.print("current ADC reading: ");
       Serial.println(get(rb));
-      delay(500);
+      delay(250);
     }
-    if (rb->np == rb->npc) {  // all points collected and sent to serial port, we are done
+    if (rb->np == rb->npc) {  // all points collected
       break;
     }
   }
   stop_ADC();
-  // Serial.println("initialized state:");
-  // report_ring_buffer(rb);
-  // start_ADC();              // at this point data is being collected "in the background", autonomously, with ISR watching continuosly
-  //  do {          // send any available data to the serial port
-  //   report_ring_buffer(rb);
-  //   Serial.print("npc: ");
-  //   Serial.println(rb->npc);
-  //   Serial.print("nps: ");
-  //   Serial.println(rb->nps);
-  //   rb->nps++;
-  // } while (data_is_available(rb));
-  // if (rb->np == rb->npc) {  // all points collected and sent to serial port, we are done
-  //   stop_ADC();
-  // }
 }
 
 // Helper Functions
@@ -90,7 +76,6 @@ void config_ADC() {
 
 // Start the ADC = start acquiring data
 void start_ADC() {
-  Serial.println("Starting the ADC...");
   // ADCSRA |= (1 << ADSC);  // start the ADC
   ADCSRA |= bit(ADSC) | bit(ADIE);
   rb->adc_running = true;
@@ -112,14 +97,8 @@ void stop_ADC() {
 ISR(ADC_vect) {
   extern ring_buffer *rb;
   if (rb->np != rb->npc) {  // collect more data
-    put(rb, ADC);           // put the value in the ring buffer (ADC is a memory address)
+    put(rb, ADC);
     rb->npc++;
     rb->adc_done = true;
-    // the following is/was helpful in development, but Gammon says no Serial activity in an ISR,
-    // as it involves interupts
-    // Serial.print("\nnpc: ");
-    // Serial.println(rb->npc);
-    // Serial.println("ADC collected a point:");
-    // report_ring_buffer(rb);
   }
 }
