@@ -1,14 +1,18 @@
 # Change Log for Bnmr
 
+Note: Official releases will be tagged accordingly.  If you don't see a tag corresponding to a version listed below then that version is still WIP.
+
 ## Version 0.1.1
-### Misc
-* Added `package.json` to provide information in a more formal manner.
-* Improved and expanded `README.md`.
-* Renamed `acquire_1H()` to just `acquire()`.
 
 ### New Functions
 * Added `reset_pins()` function.
 * Added `capture_FID()` function.  Handles the ADC and data comms.
+* Added functions for a ring buffer, which takes the ADC data and sends it upstream.
+
+### Misc
+* Added `package.json` to provide information in a more formal manner.
+* Improved and expanded `README.md`.
+* Renamed `acquire_1H()` to just `acquire()`.
 
 ## Version 0.1.0 26 Dec 2023
 * First release to Github.

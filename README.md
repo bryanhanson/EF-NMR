@@ -13,10 +13,14 @@ Released under GPL-3, help yourself *if you dare*.  After all, it is a WIP and I
 * Use the built-in format tool in most cases.
 * Doxygen is used for documentation.
 
+### Tagged Versions
+* Tagged versions help me keep track of "working" versions at various milestones.  "Working" in quotes because one later discovers a version doesn't work as well as one thought!
+
 ### Releases
 Releases are not made on any particular schedule.  Prior to a release:
 * Edit the version number in `package.json`, `CHANGELOG.md`.
 * Review the documentation and run `doxygen`.
+* Tag the version with the version number.
 * Code is tested with Arduino Uno R3 hardware.
 
 ### Things That Should be Tested Before Release
