@@ -37,6 +37,10 @@ typedef struct ring_buffer {
   volatile int npc;
   /// `nps`: no of points transmitted via the serial port
   volatile int nps;
+  /// `adc_running`
+  volatile boolean adc_running;
+  /// `adc_done`
+  volatile boolean adc_done;
 };
 
 #endif
