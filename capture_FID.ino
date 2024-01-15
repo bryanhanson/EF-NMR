@@ -15,18 +15,20 @@
 
 void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
-  extern volatile ring_buffer *rb;
+  extern ring_buffer *rb;
   config_ADC();
   init_ring_buffer(rb);
   // Serial.println("initialized state:");
   // report_ring_buffer(rb);
-  start_ADC();  // at this point data is being collected "in the background", autonomously, with ISR watching continuosly
-  do {          // send any available data to the serial port
-    Serial.print("current buffer value: ");
-    Serial.println(get(rb));
-    rb->nps++;
-  } while (rb->nps < rb->npc);
-
+  start_ADC();              // at this point data is being collected "in the background", autonomously, with ISR watching continuosly
+                            //  do {          // send any available data to the serial port
+                            //   report_ring_buffer(rb);
+                            //   Serial.print("npc: ");
+                            //   Serial.println(rb->npc);
+                            //   Serial.print("nps: ");
+                            //   Serial.println(rb->nps);
+                            //   rb->nps++;
+                            // } while (data_is_available(rb));
   if (rb->np == rb->npc) {  // all points collected and sent to serial port, we are done
     stop_ADC();
   }
@@ -74,19 +76,20 @@ void stop_ADC() {
   ADCSRA |= (0 << ADEN);
 }
 
-// Interupt Handler (ISR = interupt service routine)
+// Interrupt Handler (ISR = interupt service routine)
 // This is the most peculiar function I have run into in a sea of novelties.
 // This is not called by anyone here; it must be called ISR and
 // the argument name is mandatory, and the argument is not used here.
 // It is apparently called each time the ADC data register is full,
 // or, if in free running mode, it is called until the ADC is turned off
+// Gammon says no Serial.x no delays inside an ISR
 ISR(ADC_vect) {
-  extern volatile ring_buffer *rb;
-  // uint16_t ADC;
-  // Serial.println("Hello from ISR");
+  extern ring_buffer *rb;
   if (rb->np != rb->npc) {  // collect more data
-    put(rb, &ADC);          // put the value in the ring buffer (ADC is a memory address)
+    put(rb, ADC);          // put the value in the ring buffer (ADC is a memory address)
     rb->npc++;
+    // the following is/was helpful in development, but Gammon says no Serial activity in an ISR,
+    // as it involves interupts
     Serial.print("\nnpc: ");
     Serial.println(rb->npc);
     Serial.println("ADC collected a point:");
