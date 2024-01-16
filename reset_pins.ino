@@ -1,6 +1,6 @@
 /**
- * @file
  * @brief Reset (Shutdown) All Pins
+ *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *

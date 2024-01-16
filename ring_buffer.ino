@@ -1,12 +1,15 @@
+/** \defgroup Ring_Buffer_Functions Functions for working with the ring buffer
+* @note `get()` and `put()` modified from [Wikipedia](https://en.wikipedia.org/wiki/Circular_buffer).
+**/
+
 /**
- * @file
- * @brief Functions for Handling the Ring Buffer
- *
- * Heavily modified and extended from [Wikipedia](https://en.wikipedia.org/wiki/Circular_buffer).
+ * @ingroup Ring_Buffer_Functions
+ * @brief Initialize the Ring Buffer
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
  * 
  * */
 
@@ -24,6 +27,17 @@ void init_ring_buffer(ring_buffer *rb) {
   };
 }
 
+/**
+ * @ingroup Ring_Buffer_Functions
+ * @brief Put/Add a Value to the Ring Buffer
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * @param item `int`; The value to be put in the ring buffer.
+ * */
+
 int put(ring_buffer *rb, int item) {
   extern ring_buffer *rb;
   if ((rb->writeIndx + 1) % RB_SIZE == rb->readIndx) {
@@ -34,6 +48,17 @@ int put(ring_buffer *rb, int item) {
   rb->writeIndx = (rb->writeIndx + 1) % RB_SIZE;
   return 1;
 }
+
+/**
+ * @ingroup Ring_Buffer_Functions
+ * @brief Get a Value from the Ring Buffer
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * 
+ * */
 
 int get(ring_buffer *rb) {
   extern ring_buffer *rb;
@@ -47,6 +72,17 @@ int get(ring_buffer *rb) {
   }
 }
 
+/**
+ * @ingroup Ring_Buffer_Functions
+ * @brief Check if the Ring Buffer has Data in it
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * 
+ * */
+
 int data_is_available(ring_buffer *rb) {
   extern ring_buffer *rb;
   if (rb->readIndx == rb->writeIndx) {
@@ -56,6 +92,17 @@ int data_is_available(ring_buffer *rb) {
     return 1;  // buffer has data
   }
 }
+
+/**
+ * @ingroup Ring_Buffer_Functions
+ * @brief Report the Ring Buffer Status
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * 
+ * */
 
 void report_ring_buffer(ring_buffer *rb) {
   extern ring_buffer *rb;

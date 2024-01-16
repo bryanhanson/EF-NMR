@@ -1,5 +1,4 @@
 /**
- * @file
  * @brief Compute on/off times for a `pulse_program` struct.
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license

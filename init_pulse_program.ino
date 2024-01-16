@@ -1,6 +1,6 @@
 /**
- * @file
- * @brief Build a Struct Containing the Pulse Program.
+ * @brief Initialize a Struct Containing the Pulse Program.
+ *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *

@@ -1,5 +1,4 @@
 /**
- * @file
  * @brief Compute the Cumulative Sum of the `end_time` member in a `pulse_program` Struct.
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license

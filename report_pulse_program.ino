@@ -1,10 +1,10 @@
 /**
- * @file
- * @brief Print the a `pulse_program` Struct to Console.  Used for troubleshooting.
+ * @brief Print a `pulse_program` Struct to Console.  Used for troubleshooting.
+ *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright GPL-3 license
  *
- * @param pp `pulse_program`; Struct to the pulse program.
+ * @param pp `pulse_program`; Struct containing the pulse program.
  * @param size int; The number of events in the struct.
  * @return void.  A summary of the struct is printed to the console.
  * */

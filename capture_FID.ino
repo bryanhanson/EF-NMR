@@ -1,5 +1,7 @@
+/** \defgroup ADC_Functions Functions that access the ADC **/
+
 /**
- * @file
+ * @ingroup ADC_Functions
  * @brief Capture the FID and Send it to the Serial Port
  *
  * Code here follows very closely the material in Dunbar 2020, Chapter 9.2
@@ -11,12 +13,17 @@
  *
  * @note The code here is hard-wired to use pin A0 as the analog input.
  * 
+ * @param pp `pulse_program`; Struct containing the pulse program.
+ * @param size int; The number of events in the pulse program.
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * @param report int; Should the pulse program be printed to console?
+ *
  * */
 
 void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
   extern ring_buffer *rb;
-  int cntr = 0; // counter for reporting ADC values; avoid scrolling off the right side
+  int cntr = 0; // counter for reporting ADC values; use to avoid scrolling off the right side
   config_ADC();
   init_ring_buffer(rb);
   Serial.println("ADC readings: ");
@@ -46,7 +53,16 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
 
 // Helper Functions
 
-// ADC Configuration
+/**
+ * @ingroup ADC_Functions
+ * @brief Configure the ADC
+ *
+ * Configures the ADC by setting the appropriate bits.
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * */
 void config_ADC() {
   Serial.println("Configuring the ADC...");
   // PRR &= ~(1 << PRADC);                                            // power up the ADC
@@ -80,26 +96,50 @@ void config_ADC() {
   ADMUX = bit(REFS0) | (RX_PIN & 0x07);            // AVcc and select input port
 }
 
-// Start the ADC = start acquiring data
+/**
+ * @ingroup ADC_Functions
+ * @brief Start the ADC
+ *
+ * Initiates data acquisition.
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * */
 void start_ADC() {
   // ADCSRA |= (1 << ADSC);  // start the ADC
   ADCSRA |= bit(ADSC) | bit(ADIE);
   rb->adc_running = true;
 }
 
-// Stop the ADC = stop acquiring data
+/**
+ * \ingroup ADC_Functions
+ * @brief Stop the ADC
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * */
 void stop_ADC() {
   Serial.println("Stopping the ADC...");
   ADCSRA |= (0 << ADEN);
 }
 
-// Interrupt Handler (ISR = interupt service routine)
-// This is the most peculiar function I have run into in a sea of novelties.
-// This is not called by anyone here; it must be called ISR and
-// the argument name is mandatory, and the argument is not used here.
-// It is apparently called each time the ADC data register is full,
-// or, if in free running mode, it is called until the ADC is turned off
-// Gammon says no Serial.x no delays inside an ISR
+/**
+ * @ingroup ADC_Functions
+ * @brief ADC Interrupt Service Routine.
+ *
+ * This is the most peculiar function I have run into in a sea of novelties.
+ * This is not called by anyone here; it must be called ISR and
+ * the argument name is mandatory, and the argument is not used here.
+ * It is apparently called each time the ADC data register is full,
+ * or, if in free running mode, it is called until the ADC is turned off
+ * Gammon says no Serial.x no delays inside an ISR.
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * */
+
 ISR(ADC_vect) {
   extern ring_buffer *rb;
   if (rb->np != rb->npc) {  // collect more data

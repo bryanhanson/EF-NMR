@@ -1,4 +1,5 @@
 /**
+ * @file
  * @brief Miscellaneous Defines
  *
  * These values should not be changed by the casual user.
@@ -11,8 +12,11 @@
 #ifndef MISC_DEFINES
 #define MISC_DEFINES
 
-#define RX_PIN A0 // receive pin; this is hard-wired in capture_FID, DO NOT CHANGE!  Automatic: #define A0 14;
-#define RB_SIZE 12  // ring buffer capacity; only N-1 values can actually be held
-#define NO_POINTS 100 // no of data points to collect in a single scan
+/// Receive pin; this is hard-wired in `capture_FID()`, **DO NOT CHANGE!**  Elsewhere: #define A0 14
+#define RX_PIN A0
+/// Ring buffer capacity
+#define RB_SIZE 12
+/// Number of data points collected in a single scan
+#define NO_POINTS 100
 
 #endif

@@ -1,14 +1,11 @@
 /**
- * @file
  * @brief Bryan's EF-NMR Software
  *
  * Inspired by the more complex version by Carl Michal, but built from scratch, with all its own warts.
  * Trying for Arduino-only control of the NMR.
  *
- * Global variables that are important to understand:
- *   * `start` A boolean which is monitored and modifed by `listen_for_instruction` and passed to `loop`.
- *   * `pulse_program` The *address* of a struct holding the pulse program events. This is passed around and accessed by many functions. 
- *   * `ring_buffer` The *address* of a struct holding the ring buffer and related parameters. Used mainly by `acquire_FID()`.
+ * Overall Flow of the Program
+ *   * Coming later...
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -23,9 +20,11 @@
 #include "user_input.h"
 #include "misc_defines.h"
 
-// global variables
+/// `start` A boolean which is monitored and modifed by `listen_for_instruction` and passed to `loop`
 boolean start = false;
+/// `pulse_program` The *address* of a struct holding the pulse program events. This is passed around and accessed by many functions.
 pulse_program *pp = malloc(sizeof(pulse_program));
+/// `ring_buffer` The *address* of a struct holding the ring buffer and related parameters. Used by `capture_FID()`.
 ring_buffer *rb = malloc(sizeof(ring_buffer));
 
 void setup() {

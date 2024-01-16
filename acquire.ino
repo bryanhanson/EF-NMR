@@ -1,5 +1,4 @@
 /**
- * @file
  * @brief Acquire NMR data
  *
  * Supervises the overall acquisition process.
@@ -7,6 +6,11 @@
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
+ * @param pp `pulse_program`; Struct containing the pulse program.
+ * @param size int; The number of events in the pulse program.
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * @param report int; Should the pulse program be printed to console?
+
  * */
 
 void acquire(pulse_program *pp, int size, ring_buffer *rb, int report) {
