@@ -23,7 +23,7 @@
 void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
   extern pulse_program *pp;
   extern ring_buffer *rb;
-  int cntr = 0; // counter for reporting ADC values; use to avoid scrolling off the right side
+  int cntr = 0;  // counter for reporting ADC values; use to avoid scrolling off the right side
   config_ADC();
   init_ring_buffer(rb);
   Serial.println("ADC readings: ");
@@ -38,9 +38,9 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
       // report_ring_buffer(rb);
       cntr++;
       Serial.print(" ");
-      Serial.print(get(rb)); // one must get the values otherwise the buffer fills quickly
+      Serial.print(get(rb));  // one must get the values otherwise the buffer fills quickly
       if ((cntr % 20) == 0) {
-        Serial.println(" "); // wrap the output
+        Serial.println(" ");  // wrap the output
       }
       delay(250);
     }
@@ -90,10 +90,21 @@ void config_ADC() {
   //          | _BV(ADIE)   // interrupt enable
   //          | 7;          // prescaler = 128
 
-  // This version from N. Gammon
-  ADCSRA = bit(ADEN);                              // turn ADC on
+  // This version modified from N. Gammon
+  ADCSRA = 0; // ensure defaults -- needed if ADC was on from a previous run
+  print_bin(ADCSRA);
+  ADCSRA = bit(ADEN);
+  print_bin(ADCSRA);  // turn ADC on
+  ADCSRA |= bit(ADIE);
+  print_bin(ADCSRA);                               // turn on interrupts
   ADCSRA |= bit(ADPS0) | bit(ADPS1) | bit(ADPS2);  // Prescaler of 128
-  ADMUX = bit(REFS0) | (RX_PIN & 0x07);            // AVcc and select input port
+  print_bin(ADCSRA);
+  ADMUX = 0; // ensure defaults
+  // ADMUX = bit(REFS0) | (RX_PIN & 0x07);  // AVcc and select input port
+  ADMUX = bit(REFS0);  // AVcc as reference
+  print_bin(ADMUX);
+  ADMUX |= bit(RX_PIN); // use pin A0 (technically it is the default, but let's be explicit)
+  print_bin(ADMUX);
 }
 
 /**
@@ -108,7 +119,8 @@ void config_ADC() {
  * */
 void start_ADC() {
   // ADCSRA |= (1 << ADSC);  // start the ADC
-  ADCSRA |= bit(ADSC) | bit(ADIE);
+  // ADCSRA |= bit(ADSC) | bit(ADIE);  // activate interrupts and turn on ADC
+  ADCSRA |= bit(ADSC);  // start collecting data
   rb->adc_running = true;
 }
 
@@ -121,7 +133,7 @@ void start_ADC() {
  *
  * */
 void stop_ADC() {
-  Serial.println("Stopping the ADC...");
+  Serial.println("\nStopping the ADC...");
   ADCSRA |= (0 << ADEN);
 }
 
@@ -147,4 +159,15 @@ ISR(ADC_vect) {
     rb->npc++;
     rb->adc_done = true;
   }
+}
+
+// modified from https://forum.arduino.cc/t/how-can-i-serial-println-a-binary-output-that-will-give-all-the-leading-zeros-of-a-variable/962247/2
+void print_bin(byte aByte) {
+  for (int8_t aBit = 7; aBit >= 0; aBit--) {
+    if (aBit == 3) {
+      Serial.print(" ");
+    }
+    Serial.print(bitRead(aByte, aBit) ? '1' : '0');
+  }
+  Serial.println(" ");
 }
