@@ -14,7 +14,7 @@ Released under GPL-3, help yourself *if you dare*.  After all, it is a WIP and I
 * Doxygen is used for documentation.
 
 ### Tagged Versions
-* Tagged versions help me keep track of "working" versions at various milestones.  "Working" in quotes because one later discovers a version doesn't work as well as one thought!
+* Tagged versions help me keep track of "working" versions at various milestones.  "Working" in quotes because one later discovers a version doesn't work as well as one thought!  These are not generally official releases.
 
 ### Releases
 Releases are not made on any particular schedule.  Prior to a release:
@@ -24,7 +24,8 @@ Releases are not made on any particular schedule.  Prior to a release:
 * Code is tested with Arduino Uno R3 hardware.
 
 ### Things That Should be Tested Before Release
+* Builds and compiles w/o error.
+* `g` and `s` are respected.
 * Start up message is emitted.
 * Invalid `EXPT` is captured and reported.
 * Different values of `REPORT` are handled appropriately.
-* 
