@@ -35,7 +35,6 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
     if (rb->adc_done) {
       rb->adc_running = false;
       rb->adc_done = false;
-      // report_ring_buffer(rb);
       cntr++;
       Serial.print(" ");
       Serial.print(get(rb));  // one must get the values otherwise the buffer fills quickly
@@ -66,45 +65,18 @@ void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
 void config_ADC() {
   Serial.println("Configuring the ADC...");
   // PRR &= ~(1 << PRADC);                                            // power up the ADC
-  // ADCSRA |= (1 << ADEN);                                           // enable ADC
-  // ADCSRA = (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);             // slow the clock
-  // ADCSRA |= (1 << ADIE);                                           // set interupt to notify data is available for further use
-  // ADCSRA |= (1 << ADATE);                                          // auto-trigger on
-  // ADCSRB = 0;                                                      // free-running mode
-  // ADMUX = (0 << REFS1) | (1 << REFS0);                             // use 5 V internal reference
-  // ADMUX &= ~(1 << ADLAR);                                          // right-align the 10 bit output in 2 byte/16 bit space
-  // ADMUX |= (0 << MUX3) | (0 << MUX2) | (0 << MUX1) | (0 << MUX0);  // multiplexer input; use A0
-  // DIDR0 |= (1 << ADC0D);                                           // disable digital input to pin A0
-  // delay(20);                                                       // wait for voltage to settle
-  //
-
-  // The following settings taken from https://gist.github.com/edgar-bonet/0b03735d70366bc05fc6
-  // ADMUX = _BV(REFS0)     // ref = AVCC
-  //         | _BV(ADLAR)   // left adjust result
-  //         | A0;          // input channel
-  // ADCSRB = 0;            // free running mode
-  // ADCSRA = _BV(ADEN)     // enable
-  //                        //  | _BV(ADSC)   // start conversion
-  //          | _BV(ADATE)  // auto trigger enable
-  //          | _BV(ADIF)   // clear interrupt flag
-  //          | _BV(ADIE)   // interrupt enable
-  //          | 7;          // prescaler = 128
-
-  // This version modified from N. Gammon
-  ADCSRA = 0; // ensure defaults -- needed if ADC was on from a previous run
-  print_bin(ADCSRA);
-  ADCSRA = bit(ADEN);
-  print_bin(ADCSRA);  // turn ADC on
-  ADCSRA |= bit(ADIE);
-  print_bin(ADCSRA);                               // turn on interrupts
-  ADCSRA |= bit(ADPS0) | bit(ADPS1) | bit(ADPS2);  // Prescaler of 128
-  print_bin(ADCSRA);
-  ADMUX = 0; // ensure defaults
-  // ADMUX = bit(REFS0) | (RX_PIN & 0x07);  // AVcc and select input port
-  ADMUX = bit(REFS0);  // AVcc as reference
-  print_bin(ADMUX);
-  ADMUX |= bit(RX_PIN); // use pin A0 (technically it is the default, but let's be explicit)
-  print_bin(ADMUX);
+  DIDR0 |= bit(ADC0D);  // disable digital input to pin A0
+  ADCSRA = 0;           // ensure defaults -- needed if ADC was on from a previous run
+  ADCSRA = bit(ADEN);  // turn ADC on
+  ADCSRA |= bit(ADIE);  // turn on interrupts
+  ADCSRA |= bit(ADPS0) | bit(ADPS1) | bit(ADPS2);  // Clock prescaler of 128
+  // These next 2 lines are needed for free-running ADC
+  // ADCSRA |= bit(ADATE);  // turn on auto-trigger (needed for free-running data collection)
+  // ADCSRB = 0;            // activate free-running data collection
+  ADMUX = 0;             // ensure defaults
+  ADMUX = bit(REFS0);    // AVcc as reference
+  ADMUX |= bit(RX_PIN);  // use pin A0 (technically it is the default, but let's be explicit)
+  delay(20);             // allow voltage to settle
 }
 
 /**
@@ -118,8 +90,6 @@ void config_ADC() {
  *
  * */
 void start_ADC() {
-  // ADCSRA |= (1 << ADSC);  // start the ADC
-  // ADCSRA |= bit(ADSC) | bit(ADIE);  // activate interrupts and turn on ADC
   ADCSRA |= bit(ADSC);  // start collecting data
   rb->adc_running = true;
 }
@@ -141,12 +111,6 @@ void stop_ADC() {
  * @ingroup ADC_Functions
  * @brief ADC Interrupt Service Routine.
  *
- * This is the most peculiar function I have run into in a sea of novelties.
- * This is not called by anyone here; it must be called ISR and
- * the argument name is mandatory, and the argument is not used here.
- * It is apparently called each time the ADC data register is full,
- * or, if in free running mode, it is called until the ADC is turned off
- * Gammon says no Serial.x no delays inside an ISR.
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
