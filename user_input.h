@@ -33,4 +33,12 @@
 /// The pins associated with each event. A value of -1 means no pin is hot -- use for delays
 #define PIN_ASSIGNMENTS { POL_PIN, -1, TX_PIN, -1, RX_PIN, -1 }
 
+
+/// Receive pin; used in `capture_FID()`
+#define RX_PIN A0
+/// Ring buffer capacity
+#define RB_SIZE 20
+/// Number of data points collected in a single scan
+#define NO_POINTS 50
+
 #endif

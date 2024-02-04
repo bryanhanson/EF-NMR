@@ -18,7 +18,6 @@
 
 #include "structs.h"
 #include "user_input.h"
-#include "misc_defines.h"
 
 /// `start` A boolean which is monitored and modifed by `listen_for_instruction` and passed to `loop`
 boolean start = false;

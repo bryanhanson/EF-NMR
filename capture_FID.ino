@@ -17,21 +17,23 @@
 
 void capture_FID(ring_buffer *rb) {
   extern ring_buffer *rb;
-  int val; // holder for ADC value
+  int val = 0;   // holder for ADC value
   int cntr = 0;  // counter for reporting ADC values; use to avoid scrolling off the right side
-  config_ADC();
   init_ring_buffer(rb);
+  config_ADC();
   start_ADC();
   Serial.println("ADC readings: ");
   while (rb->npc < rb->np) {
-    cntr++;
-    val = get(rb);  // one must get the values otherwise the buffer fills quickly
+    val = get(rb);
     rb->npc++;
-    Serial.print(" ");
-    Serial.print(val);
-    if ((cntr % 20) == 0) {
-      Serial.println(" ");  // wrap the output
-    }
+    // reporting
+    Serial.println(rb->npc);
+    // Serial.print(" ");
+    // Serial.print(val);
+    // cntr++;
+    // if ((cntr % 20) == 0) {
+    //   Serial.println(" ");  // wrap the output
+    // }
   }
   stop_ADC();
 }
@@ -107,16 +109,4 @@ void stop_ADC() {
 ISR(ADC_vect) {
   extern ring_buffer *rb;
   put(rb, ADC);
-}
-
-// Helper function to inspect registers as nicely formatted bytes. Modified from
-// https://forum.arduino.cc/t/how-can-i-serial-println-a-binary-output-that-will-give-all-the-leading-zeros-of-a-variable/962247/2
-void print_bin(byte aByte) {
-  for (int8_t aBit = 7; aBit >= 0; aBit--) {
-    if (aBit == 3) {
-      Serial.print(" ");
-    }
-    Serial.print(bitRead(aByte, aBit) ? '1' : '0');
-  }
-  Serial.println(" ");
 }

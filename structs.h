@@ -1,6 +1,5 @@
 
 #include "user_input.h"
-#include "misc_defines.h"
 
 #ifndef STRUCTS
 #define STRUCTS
