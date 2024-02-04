@@ -16,12 +16,12 @@
 void init_ring_buffer(ring_buffer *rb) {
   extern ring_buffer *rb;
   *rb = {
-    { 0 },      // zero the buffer
-    0,          // write index
-    0,          // read index
-    NO_POINTS,  // no of points to collect
-    0,          // no of points collected so far
-    0,          // no of points sent to serial port so far
+    { 0 },      // zero the buffer -- the buffer itself
+    0,          // write index -- writeIndx
+    0,          // read index -- readIndx
+    NO_POINTS,  // no of points to collect -- np
+    0,          // no of points collected so far -- npc
+    0,          // no of points sent to serial port so far -- nps
     false,      // is adc_running?
     false       // is adc_done?
   };

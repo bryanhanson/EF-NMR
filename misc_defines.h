@@ -17,6 +17,6 @@
 /// Ring buffer capacity
 #define RB_SIZE 20
 /// Number of data points collected in a single scan
-#define NO_POINTS 100
+#define NO_POINTS 50
 
 #endif

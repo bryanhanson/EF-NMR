@@ -11,40 +11,26 @@
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
- * @note The code here is hard-wired to use pin A0 as the analog input.
- * 
- * @param pp `pulse_program`; Struct containing the pulse program.
- * @param size int; The number of events in the pulse program.
  * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
- * @param report int; Should the pulse program be printed to console?
  *
  * */
 
-void capture_FID(pulse_program *pp, int size, ring_buffer *rb, int report) {
-  extern pulse_program *pp;
+void capture_FID(ring_buffer *rb) {
   extern ring_buffer *rb;
+  int val; // holder for ADC value
   int cntr = 0;  // counter for reporting ADC values; use to avoid scrolling off the right side
   config_ADC();
   init_ring_buffer(rb);
+  start_ADC();
   Serial.println("ADC readings: ");
-  while (1) {
-    if (!rb->adc_running) {
-      rb->adc_running = true;
-      start_ADC();
-    }
-    if (rb->adc_done) {
-      rb->adc_running = false;
-      rb->adc_done = false;
-      cntr++;
-      Serial.print(" ");
-      Serial.print(get(rb));  // one must get the values otherwise the buffer fills quickly
-      if ((cntr % 20) == 0) {
-        Serial.println(" ");  // wrap the output
-      }
-      delay(250);
-    }
-    if (rb->np == rb->npc) {  // all points collected
-      break;
+  while (rb->npc < rb->np) {
+    cntr++;
+    val = get(rb);  // one must get the values otherwise the buffer fills quickly
+    rb->npc++;
+    Serial.print(" ");
+    Serial.print(val);
+    if ((cntr % 20) == 0) {
+      Serial.println(" ");  // wrap the output
     }
   }
   stop_ADC();
@@ -70,9 +56,9 @@ void config_ADC() {
   ADCSRA = bit(ADEN);                              // turn ADC on
   ADCSRA |= bit(ADIE);                             // turn on interrupts
   ADCSRA |= bit(ADPS0) | bit(ADPS1) | bit(ADPS2);  // Clock prescaler of 128
-  // These next 2 lines are needed for free-running ADC
-  // ADCSRA |= bit(ADATE);  // turn on auto-trigger (needed for free-running data collection)
-  // ADCSRB = 0;            // activate free-running data collection
+  // These next 2 lines set up the ADC in free-running mode
+  ADCSRA |= bit(ADATE);  // turn on auto-trigger (needed for free-running data collection)
+  ADCSRB = 0;            // activate free-running data collection
   ADMUX = 0;             // ensure defaults
   ADMUX = bit(REFS0);    // AVcc as reference
   ADMUX |= bit(RX_PIN);  // input pin
@@ -91,8 +77,9 @@ void config_ADC() {
  *
  * */
 void start_ADC() {
+  Serial.println("\nStarting the ADC...");
   ADCSRA |= bit(ADSC);  // start collecting data
-  rb->adc_running = true;
+  // rb->adc_running = true;
 }
 
 /**
@@ -119,11 +106,7 @@ void stop_ADC() {
 
 ISR(ADC_vect) {
   extern ring_buffer *rb;
-  if (rb->np != rb->npc) {  // collect more data
-    put(rb, ADC);
-    rb->npc++;
-    rb->adc_done = true;
-  }
+  put(rb, ADC);
 }
 
 // Helper function to inspect registers as nicely formatted bytes. Modified from
