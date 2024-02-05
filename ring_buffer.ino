@@ -21,9 +21,7 @@ void init_ring_buffer(ring_buffer *rb) {
     0,          // read index -- readIndx
     NO_POINTS,  // no of points to collect -- np
     0,          // no of points collected so far -- npc
-    0,          // no of points sent to serial port so far -- nps
-    false,      // is adc_running?
-    false       // is adc_done?
+    0           // no of points sent to serial port so far -- nps
   };
 }
 
@@ -68,7 +66,7 @@ int get(ring_buffer *rb) {
     rb->readIndx = (rb->readIndx + 1) % RB_SIZE;
     return value;
   } else {
-    return 1; // should this be zero?
+    return 1;  // should this be zero?
   }
 }
 
