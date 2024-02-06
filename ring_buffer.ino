@@ -104,15 +104,25 @@ int data_is_available(ring_buffer *rb) {
 
 void report_ring_buffer(ring_buffer *rb) {
   extern ring_buffer *rb;
+  int cntr = 0;  // counter for reporting buffer entries; use to avoid scrolling off the right side
   Serial.println("ring buffer:");
   for (int i = 0; i < RB_SIZE; i++) {
+    cntr++;
     Serial.print(rb->rbuf[i]);
     Serial.print(" ");
+    if ((cntr % 10) == 0) {
+      Serial.println(" ");  // wrap the output
+    }
   }
-  Serial.println("");
-  Serial.print("\twriteIndx = ");
+  Serial.print("\n\twriteIndx = ");
   Serial.println(rb->writeIndx);
   Serial.print("\treadIndx = ");
   Serial.println(rb->readIndx);
+  Serial.print("\tnp = ");
+  Serial.println(rb->np);
+  Serial.print("\tnpc = ");
+  Serial.println(rb->npc);
+  Serial.print("\tnps = ");
+  Serial.println(rb->nps);
   Serial.println(" ");
 }

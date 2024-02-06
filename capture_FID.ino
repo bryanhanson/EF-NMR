@@ -17,24 +17,20 @@
 
 void capture_FID(ring_buffer *rb) {
   extern ring_buffer *rb;
-  int val = 0;   // holder for ADC value
-  int cntr = 0;  // counter for reporting ADC values; use to avoid scrolling off the right side
+  int val = 0;  // holder for ADC value pulled from ring buffer
   init_ring_buffer(rb);
   config_ADC();
   start_ADC();
-  Serial.println("ADC readings: ");
-  while (rb->npc < rb->np) {
-    val = get(rb);
-    // reporting
-    Serial.println(rb->npc);
-    Serial.print(" ");
-    Serial.print(val);
-    cntr++;
-    if ((cntr % 20) == 0) {
-      Serial.println(" ");  // wrap the output
+  // Serial.println("ADC readings: ");
+  do {
+    if (data_is_available(rb)) {
+      val = get(rb);
+      rb->nps++;
     }
-  }
+  } while ((rb->nps < rb->np));
   stop_ADC();
+  cli();
+  report_ring_buffer(rb);
 }
 
 // Helper Functions
@@ -106,7 +102,7 @@ void stop_ADC() {
 
 ISR(ADC_vect) {
   extern ring_buffer *rb;
-  while (rb->npc < rb->np) {
+  if (rb->npc < rb->np) {
     put(rb, ADC);
     rb->npc++;
   }
