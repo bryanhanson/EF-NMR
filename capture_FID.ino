@@ -21,7 +21,6 @@ void capture_FID(ring_buffer *rb) {
   init_ring_buffer(rb);
   config_ADC();
   start_ADC();
-  // Serial.println("ADC readings: ");
   do {
     if (data_is_available(rb)) {
       val = get(rb);
@@ -30,7 +29,8 @@ void capture_FID(ring_buffer *rb) {
   } while ((rb->nps < rb->np));
   stop_ADC();
   cli();
-  report_ring_buffer(rb);
+  // report_ring_buffer_contents(rb);
+  report_ring_buffer_extra_data(rb);
 }
 
 // Helper Functions
@@ -74,7 +74,7 @@ void config_ADC() {
  *
  * */
 void start_ADC() {
-  Serial.println("\nStarting the ADC...");
+  Serial.println("Starting the ADC...");
   ADCSRA |= bit(ADSC);  // start collecting data
 }
 
@@ -87,7 +87,7 @@ void start_ADC() {
  *
  * */
 void stop_ADC() {
-  Serial.println("\nStopping the ADC...");
+  Serial.println("Stopping the ADC...");
   ADCSRA |= (0 << ADEN);
 }
 

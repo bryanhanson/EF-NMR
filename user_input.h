@@ -35,9 +35,9 @@
 /// The pins associated with each event. A value of -1 means no pin is hot -- use for delays
 #define PIN_ASSIGNMENTS { POL_PIN, -1, TX_PIN, -1, RX_PIN, -1 }
 
-/// Ring buffer capacity
+/// Ring buffer capacity.  A value of 10 doesn't work, 20 seems to be fine.
 #define RB_SIZE 20
 /// Number of data points collected in a single scan
-#define NO_POINTS 500
+#define NO_POINTS 1000
 
 #endif

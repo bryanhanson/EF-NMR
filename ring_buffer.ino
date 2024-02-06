@@ -28,6 +28,8 @@ void init_ring_buffer(ring_buffer *rb) {
 /**
  * @ingroup Ring_Buffer_Functions
  * @brief Put/Add a Value to the Ring Buffer
+ * @note If one gets the "buffer is full" message that means it is not being emptied fast enough
+ * -- this is a serious problem.
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -73,6 +75,7 @@ int get(ring_buffer *rb) {
 /**
  * @ingroup Ring_Buffer_Functions
  * @brief Check if the Ring Buffer has Data in it
+ * @note An empty buffer message is not a big deal -- it means one is emptying the buffer faster than one is filling it.
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -84,7 +87,7 @@ int get(ring_buffer *rb) {
 int data_is_available(ring_buffer *rb) {
   extern ring_buffer *rb;
   if (rb->readIndx == rb->writeIndx) {
-    Serial.println("\nring buffer is empty");
+    // Serial.println("\nring buffer is empty");
     return 0;
   } else {
     return 1;  // buffer has data
@@ -93,7 +96,7 @@ int data_is_available(ring_buffer *rb) {
 
 /**
  * @ingroup Ring_Buffer_Functions
- * @brief Report the Ring Buffer Status
+ * @brief Report the Ring Buffer Contents
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -102,10 +105,10 @@ int data_is_available(ring_buffer *rb) {
  * 
  * */
 
-void report_ring_buffer(ring_buffer *rb) {
+void report_ring_buffer_contents(ring_buffer *rb) {
   extern ring_buffer *rb;
   int cntr = 0;  // counter for reporting buffer entries; use to avoid scrolling off the right side
-  Serial.println("ring buffer:");
+  Serial.println("ring buffer contents:");
   for (int i = 0; i < RB_SIZE; i++) {
     cntr++;
     Serial.print(rb->rbuf[i]);
@@ -118,6 +121,24 @@ void report_ring_buffer(ring_buffer *rb) {
   Serial.println(rb->writeIndx);
   Serial.print("\treadIndx = ");
   Serial.println(rb->readIndx);
+  Serial.println(" ");
+}
+
+/**
+ * @ingroup Ring_Buffer_Functions
+ * @brief Report the Ring Buffer Extra Data
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * 
+ * */
+
+void report_ring_buffer_extra_data(ring_buffer *rb) {
+  extern ring_buffer *rb;
+  int cntr = 0;  // counter for reporting buffer entries; use to avoid scrolling off the right side
+  Serial.println("ring buffer extra data:");
   Serial.print("\tnp = ");
   Serial.println(rb->np);
   Serial.print("\tnpc = ");
