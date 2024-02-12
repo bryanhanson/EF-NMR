@@ -52,8 +52,8 @@ void loop() {
   // Listen continuously for the command to go or stop (g or s)
   listen_for_instruction();
 
-  // while loop runs one experiment with NO_SCANS scans, then stops, leaving the main loop simply listening for g or s
-  while (start) {
+  // if loop runs one experiment with NO_SCANS scans, then stops, leaving the main loop simply listening for g or s
+  if (start) {
     init_pulse_program();  // get a fresh pulse program each time we "go"
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
