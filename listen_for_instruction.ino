@@ -20,6 +20,7 @@ void listen_for_instruction() {
     }
     if (instControl == 's') {
       start = false;
+      Serial.println(" ");
       Serial.println("\nStopped");
     }
   }
