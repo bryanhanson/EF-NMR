@@ -31,16 +31,29 @@ void setup() {
   extern pulse_program *pp;
   extern ring_buffer *rb;
 
+  // setup comms
   Serial.begin(115200);
   if (Serial) {
     Serial.println("Arduino listening...");
     Serial.println("Enter g or s at any time");
   }
+
+  // verify memory is available
+  if ((pp == NULL) | (rb == NULL)) {
+    Serial.println("Allocation failed");
+  }
+
   // turn off all pins to start
   reset_pins();
 
-  if ((pp == NULL) | (rb == NULL)) {
-    Serial.println("Allocation failed");
+  // check for a valid experiment
+  if (strcmp(EXPT, "1H") != 0) {
+    start = false;
+    free(pp);
+    free(rb);
+    reset_pins();
+    Serial.println("Invalid experiment, scans aborted!\n==================================");
+    Serial.println("");
   }
 }
 
@@ -54,7 +67,7 @@ void loop() {
 
   // if loop runs one experiment with NO_SCANS scans, then stops, leaving the main loop simply listening for g or s
   if (start) {
-    // check for a valid experiment
+
     init_pulse_program();  // get a fresh pulse program each time we "go"
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
@@ -64,15 +77,8 @@ void loop() {
         acquire(pp, SCAN_EVENT_COUNT, rb, REPORT);
         listen_for_instruction();
         if (!start) {
-          Serial.flush();
-          Serial.println(" ");
-          Serial.println(">>>> Emergency stop !!!");
           break;
         }
-      }
-      if (strcmp(EXPT, "1H") != 0) {
-        Serial.println("No experiment found");
-        i = NO_SCANS + 1;  // interrupt if valid EXPT not found
       }
       if (i == NO_SCANS) {
         start = false;
@@ -81,14 +87,6 @@ void loop() {
         reset_pins();
         Serial.println("Scans complete!");
         Serial.println("Experiment complete, stopping...\n================================");
-        Serial.println("");
-      }
-      if (i > NO_SCANS) {  // con
-        start = false;
-        free(pp);
-        free(rb);
-        reset_pins();
-        Serial.println("Invalid experiment, scans aborted!\n==================================");
         Serial.println("");
       }
     }

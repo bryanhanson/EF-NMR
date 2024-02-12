@@ -15,7 +15,7 @@
  *
  * */
 
-void capture_FID(ring_buffer *rb) {
+void capture_FID(ring_buffer *rb, int report) {
   extern ring_buffer *rb;
   int val = 0;  // holder for ADC value pulled from ring buffer
   init_ring_buffer(rb);
@@ -30,7 +30,7 @@ void capture_FID(ring_buffer *rb) {
   stop_ADC();
   cli();
   // report_ring_buffer_contents(rb);
-  report_ring_buffer_extra_data(rb);
+  if (report > 0) report_ring_buffer_extra_data(rb);
 }
 
 // Helper Functions
