@@ -19,18 +19,18 @@ void capture_FID(ring_buffer *rb, int report) {
   extern ring_buffer *rb;
   int val = 0;  // holder for ADC value pulled from ring buffer
   init_ring_buffer(rb);
-  config_ADC();
-  start_ADC();
+  config_ADC(REPORT);
+  start_ADC(REPORT);
   do {
     if (data_is_available(rb)) {
       val = get(rb);
       rb->nps++;
     }
   } while ((rb->nps < rb->np));
-  stop_ADC();
+  stop_ADC(REPORT);
   cli();
   // report_ring_buffer_contents(rb);
-  if (report > 0) report_ring_buffer_extra_data(rb);
+  if (report > 1) report_ring_buffer_extra_data(rb);
 }
 
 // Helper Functions
@@ -45,8 +45,8 @@ void capture_FID(ring_buffer *rb, int report) {
  * @copyright 2024 GPL-3 license
  *
  * */
-void config_ADC() {
-  Serial.println("Configuring the ADC...");
+void config_ADC(int report) {
+  if (report > 1) Serial.println("Configuring the ADC...");
   // PRR &= ~(1 << PRADC);                                            // power up the ADC
   DIDR0 |= bit(RX_PIN);                            // disable digital input
   ADCSRA = 0;                                      // ensure defaults -- needed if ADC was on from a previous run
@@ -73,8 +73,8 @@ void config_ADC() {
  * @copyright 2024 GPL-3 license
  *
  * */
-void start_ADC() {
-  Serial.println("Starting the ADC...");
+void start_ADC(int report) {
+  if (report > 1) Serial.println("Starting the ADC...");
   ADCSRA |= bit(ADSC);  // start collecting data
 }
 
@@ -86,8 +86,8 @@ void start_ADC() {
  * @copyright 2024 GPL-3 license
  *
  * */
-void stop_ADC() {
-  Serial.println("Stopping the ADC...");
+void stop_ADC(int report) {
+  if (report > 1) Serial.println("Stopping the ADC...");
   ADCSRA |= (0 << ADEN);
 }
 
