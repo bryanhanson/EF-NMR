@@ -24,7 +24,7 @@ void capture_FID(ring_buffer *rb, int report) {
       // Serial.print(val);
       // Serial.print(", ");
       rb->nps++;
-      spew_forth_data(rb);
+      // spew_forth_data(rb);
     }
     // if (rb->nps % max) {
     //   Serial.println(""); // wrap to new line
