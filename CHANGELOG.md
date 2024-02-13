@@ -13,6 +13,7 @@ Note: Official releases will be tagged accordingly.  If you don't see a tag corr
 * Added `package.json` to provide information in a more formal manner.
 * Improved and expanded `README.md`.
 * Renamed `acquire_1H()` to just `acquire()`.
+* Improvements to top level control of go or stop.  
 
 ## Version 0.1.0 26 Dec 2023
 * First release to Github.

@@ -13,7 +13,7 @@
 /// The experiment to be carried out
 #define EXPT "1H"
 /// The number of scans to be collected
-#define NO_SCANS 5
+#define NO_SCANS 1
 /// 0 = no troubleshooting; > 0 increasing levels of debug reporting
 #define REPORT 0
 /// Factor to convert durations given here to milliseconds
@@ -38,6 +38,6 @@
 /// Ring buffer capacity.  A value of 10 doesn't work, 20 seems to be fine.
 #define RB_SIZE 20
 /// Number of data points collected in a single scan
-#define NO_POINTS 10000
+#define NO_POINTS 100
 
 #endif

@@ -126,6 +126,27 @@ void report_ring_buffer_contents(ring_buffer *rb) {
 
 /**
  * @ingroup Ring_Buffer_Functions
+ * @brief Dump Data to Serial Port
+ *
+ * @author Bryan A. Hanson hanson@depauw.edu
+ * @copyright 2024 GPL-3 license
+ *
+ * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * 
+ * */
+
+void spew_forth_data(ring_buffer *rb) {
+  // spit out RB_SIZE chunks
+  extern ring_buffer *rb;
+  for (int i = 0; i < RB_SIZE; i++) {
+    Serial.print(rb->rbuf[i]);
+    Serial.print(" ");
+  }
+  Serial.println("");
+}
+
+/**
+ * @ingroup Ring_Buffer_Functions
  * @brief Report the Ring Buffer Extra Data
  *
  * @author Bryan A. Hanson hanson@depauw.edu

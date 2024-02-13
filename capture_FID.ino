@@ -4,10 +4,6 @@
  * @ingroup ADC_Functions
  * @brief Capture the FID and Send it to the Serial Port
  *
- * Code here follows very closely the material in Dunbar 2020, Chapter 9.2 NO LONGER TRUE
- * See the commentary there for even more details.  Also, excellent info
- * available at [Gammon's site](http://www.gammon.com.au/adc).
- *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
@@ -17,19 +13,26 @@
 
 void capture_FID(ring_buffer *rb, int report) {
   extern ring_buffer *rb;
-  int val = 0;  // holder for ADC value pulled from ring buffer
+  int val = 0;   // holder for ADC value pulled from ring buffer
+  int max = 40;  // max no of values to dump to serial port before starting a new line
   init_ring_buffer(rb);
   config_ADC(REPORT);
   start_ADC(REPORT);
   do {
     if (data_is_available(rb)) {
       val = get(rb);
+      // Serial.print(val);
+      // Serial.print(", ");
       rb->nps++;
+      spew_forth_data(rb);
     }
+    // if (rb->nps % max) {
+    //   Serial.println(""); // wrap to new line
+    // }
   } while ((rb->nps < rb->np));
   stop_ADC(REPORT);
   cli();
-  // report_ring_buffer_contents(rb);
+  // report_ring_buffer_contents(rb); // should this respond to REPORT?
   if (report > 1) report_ring_buffer_extra_data(rb);
 }
 
