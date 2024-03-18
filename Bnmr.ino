@@ -68,7 +68,7 @@ void loop() {
   // if loop runs one experiment with NO_SCANS scans, then stops, leaving the main loop simply listening for g or s
   if (start) {
 
-    init_pulse_program();  // get a fresh pulse program each time we "go"
+    init_pulse_program(REPORT);  // get a fresh pulse program each time we "go"
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
       if (strcmp(EXPT, "1H") == 0) {
@@ -81,13 +81,13 @@ void loop() {
         }
       }
       if (i == NO_SCANS) {
+        Serial.println("Scans complete!");
+        Serial.println("Experiment complete, stopping...\n================================");
+        Serial.println("");
         start = false;
         free(pp);
         free(rb);
         reset_pins();
-        Serial.println("Scans complete!");
-        Serial.println("Experiment complete, stopping...\n================================");
-        Serial.println("");
       }
     }
   }

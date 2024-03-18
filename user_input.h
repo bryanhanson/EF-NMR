@@ -13,9 +13,9 @@
 /// The experiment to be carried out
 #define EXPT "1H"
 /// The number of scans to be collected
-#define NO_SCANS 1
+#define NO_SCANS 2
 /// 0 = no troubleshooting; > 0 increasing levels of debug reporting
-#define REPORT 0
+#define REPORT 1
 /// Factor to convert durations given here to milliseconds
 #define TIME_CONV 1
 
