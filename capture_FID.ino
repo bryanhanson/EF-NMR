@@ -20,10 +20,10 @@ void capture_FID(ring_buffer *rb, int report) {
   config_ADC(report);
   start_ADC(report);
   do {
-    if (data_is_available(rb)) {
+    // if (data_is_available(rb)) {
       val = get_rb(rb);
       rb->nps++;
-    }
+    // }
   } while ((rb->nps < rb->np));
   stop_ADC(report);
   cli();
@@ -97,12 +97,7 @@ void stop_ADC(int report) {
  *
  * */
 
-#if defined(__DOXYGEN__)
-void ADC_vect(void)
-#else
-ISR(ADC_vect)
-#endif
-{
+ISR(ADC_vect) {
   extern ring_buffer *rb;
   if (rb->npc < rb->np) {
     put_rb(rb, ADC);

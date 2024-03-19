@@ -68,7 +68,7 @@ int get_rb(ring_buffer *rb) {
     rb->readIndx = (rb->readIndx + 1) % RB_SIZE;
     return value;
   } else {
-    return 1;  // should this be zero?
+    return 0;
   }
 }
 
@@ -162,7 +162,6 @@ void spew_forth_data(ring_buffer *rb) {
 
 void report_ring_buffer_extra_data(ring_buffer *rb) {
   extern ring_buffer *rb;
-  // int cntr = 0;  // counter for reporting buffer entries; use to avoid scrolling off the right side
   Serial.println("ring buffer extra data:");
   Serial.print("\tnp = ");
   Serial.println(rb->np);
