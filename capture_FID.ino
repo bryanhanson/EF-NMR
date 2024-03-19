@@ -15,6 +15,7 @@
 void capture_FID(ring_buffer *rb, int report) {
   extern ring_buffer *rb;
   int val = 0;   // holder for ADC value pulled from ring buffer
+  int cntr = 0; // counter to use with max
   int max = 40;  // max no of values to dump to serial port before starting a new line
   init_ring_buffer(rb);
   config_ADC(report);
@@ -23,6 +24,12 @@ void capture_FID(ring_buffer *rb, int report) {
     // if (data_is_available(rb)) {
       val = get_rb(rb);
       rb->nps++;
+      Serial.print(val);
+      Serial.print(" ");
+      if ((cntr % max) == 0) {
+        Serial.println("");
+      }
+      cntr++;
     // }
   } while ((rb->nps < rb->np));
   stop_ADC(report);
