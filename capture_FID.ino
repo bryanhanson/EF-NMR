@@ -8,6 +8,7 @@
  * @copyright 2024 GPL-3 license
  *
  * @param rb `ring_buffer`; Struct to hold the ADC data and related parameters.
+ * @param report integer; Level of reporting.
  *
  * */
 
@@ -16,23 +17,16 @@ void capture_FID(ring_buffer *rb, int report) {
   int val = 0;   // holder for ADC value pulled from ring buffer
   int max = 40;  // max no of values to dump to serial port before starting a new line
   init_ring_buffer(rb);
-  config_ADC(REPORT);
-  start_ADC(REPORT);
+  config_ADC(report);
+  start_ADC(report);
   do {
     if (data_is_available(rb)) {
-      val = get(rb);
-      // Serial.print(val);
-      // Serial.print(", ");
+      val = get_rb(rb);
       rb->nps++;
-      // spew_forth_data(rb);
     }
-    // if (rb->nps % max) {
-    //   Serial.println(""); // wrap to new line
-    // }
   } while ((rb->nps < rb->np));
-  stop_ADC(REPORT);
+  stop_ADC(report);
   cli();
-  // report_ring_buffer_contents(rb); // should this respond to REPORT?
   if (report > 1) report_ring_buffer_extra_data(rb);
 }
 
@@ -103,10 +97,15 @@ void stop_ADC(int report) {
  *
  * */
 
-ISR(ADC_vect) {
+#if defined(__DOXYGEN__)
+void ADC_vect(void)
+#else
+ISR(ADC_vect)
+#endif
+{
   extern ring_buffer *rb;
   if (rb->npc < rb->np) {
-    put(rb, ADC);
+    put_rb(rb, ADC);
     rb->npc++;
   }
 }

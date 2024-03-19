@@ -38,7 +38,7 @@ void init_ring_buffer(ring_buffer *rb) {
  * @param item `int`; The value to be put in the ring buffer.
  * */
 
-int put(ring_buffer *rb, int item) {
+int put_rb(ring_buffer *rb, int item) {
   extern ring_buffer *rb;
   if ((rb->writeIndx + 1) % RB_SIZE == rb->readIndx) {
     Serial.println("\nring buffer is full");
@@ -60,7 +60,7 @@ int put(ring_buffer *rb, int item) {
  * 
  * */
 
-int get(ring_buffer *rb) {
+int get_rb(ring_buffer *rb) {
   extern ring_buffer *rb;
   int value = 0;
   if (data_is_available(rb)) {
@@ -98,6 +98,8 @@ int data_is_available(ring_buffer *rb) {
  * @ingroup Ring_Buffer_Functions
  * @brief Report the Ring Buffer Contents
  *
+ * Used in development and troubleshooting only, not final `Bnmr`.
+ *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
  *
@@ -127,6 +129,8 @@ void report_ring_buffer_contents(ring_buffer *rb) {
 /**
  * @ingroup Ring_Buffer_Functions
  * @brief Dump Data to Serial Port
+ *
+ * Used in development and troubleshooting only, not final `Bnmr`.
  *
  * @author Bryan A. Hanson hanson@depauw.edu
  * @copyright 2024 GPL-3 license
@@ -158,7 +162,7 @@ void spew_forth_data(ring_buffer *rb) {
 
 void report_ring_buffer_extra_data(ring_buffer *rb) {
   extern ring_buffer *rb;
-  int cntr = 0;  // counter for reporting buffer entries; use to avoid scrolling off the right side
+  // int cntr = 0;  // counter for reporting buffer entries; use to avoid scrolling off the right side
   Serial.println("ring buffer extra data:");
   Serial.print("\tnp = ");
   Serial.println(rb->np);
