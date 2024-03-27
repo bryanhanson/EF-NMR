@@ -32,7 +32,7 @@ void setup() {
   extern ring_buffer *rb;
 
   // setup comms
-  Serial.begin(115200);
+  Serial.begin(BAUD_RATE);
   if (Serial) {
     Serial.println("Arduino listening...");
     Serial.println("Enter g or s at any time");
@@ -72,7 +72,7 @@ void loop() {
     Serial.println("Starting scans...");
     for (int i = 1; i <= NO_SCANS; i++) {
       if (strcmp(EXPT, "1H") == 0) {
-        Serial.print("\tScan no: ");
+        Serial.print("\n\tScan no: ");
         Serial.println(i);
         acquire(pp, SCAN_EVENT_COUNT, rb, REPORT);
         listen_for_instruction();
@@ -81,7 +81,7 @@ void loop() {
         }
       }
       if (i == NO_SCANS) {
-        Serial.println("Scans complete!");
+        Serial.println("\nScans complete!");
         Serial.println("Experiment complete, stopping...\n================================");
         Serial.println("");
         start = false;

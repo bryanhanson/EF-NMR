@@ -15,22 +15,21 @@
 void capture_FID(ring_buffer *rb, int report) {
   extern ring_buffer *rb;
   int val = 0;   // holder for ADC value pulled from ring buffer
-  int cntr = 0; // counter to use with max
+  int cntr = 0;  // counter to use with max
   int max = 40;  // max no of values to dump to serial port before starting a new line
   init_ring_buffer(rb);
   config_ADC(report);
   start_ADC(report);
+  // This loop is where the ring buffer is emptied
   do {
-    // if (data_is_available(rb)) {
-      val = get_rb(rb);
-      rb->nps++;
-      Serial.print(val);
-      Serial.print(" ");
-      if ((cntr % max) == 0) {
-        Serial.println("");
-      }
-      cntr++;
-    // }
+    val = get_rb(rb);
+    Serial.print(val);
+    Serial.print(" ");
+    if ((cntr % max) == 0) {
+      Serial.println("");
+    }
+    rb->nps++;
+    cntr++;
   } while ((rb->nps < rb->np));
   stop_ADC(report);
   cli();
@@ -107,7 +106,13 @@ void stop_ADC(int report) {
 ISR(ADC_vect) {
   extern ring_buffer *rb;
   if (rb->npc < rb->np) {
-    put_rb(rb, ADC);
-    rb->npc++;
+    // This is where the ring buffer is filled.
+    // Collect only every ADC_SKIP points, as the ADC is much faster than the serial port.
+    // Must respect the Nyquist-Shannon theorem!
+    if ((rb->isrcalls % ADC_SKIP) == 0) {
+      put_rb(rb, ADC);
+      rb->npc++;
+    }
   }
+  rb->isrcalls++;
 }

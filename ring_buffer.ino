@@ -20,6 +20,7 @@ void init_ring_buffer(ring_buffer *rb) {
     0,          // write index -- writeIndx
     0,          // read index -- readIndx
     NO_POINTS,  // no of points to collect -- np
+    0,          // no of times the ISR has been called -- isrcalls
     0,          // no of points collected so far -- npc
     0           // no of points sent to serial port so far -- nps
   };

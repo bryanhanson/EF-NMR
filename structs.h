@@ -42,9 +42,11 @@ typedef struct ring_buffer {
   volatile int writeIndx;
   /// `readIndx`: read index
   volatile int readIndx;
-  /// `np`: no of points to be collected. Taken from `NO_POINTS` defined in `misc_defines.h`
+  /// `np`: no of points to be collected. Taken from `NO_POINTS` defined in `user_input.h`
   volatile int np;
-  /// `npc`: no of points actually collected by ISR(ADC_vect)
+  /// `isrcalls`: the number of times the ADC ISR was called
+  volatile int isrcalls;
+  /// `npc`: no of points actually collected
   volatile int npc;
   /// `nps`: no of points transmitted via the serial port
   volatile int nps;
